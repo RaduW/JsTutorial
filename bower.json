@@ -1,0 +1,29 @@
+{
+  "name": "JsTutorial",
+  "version": "0.0.1",
+  "authors": [
+    "Radu Woinaroski <Radu.Woinaroski@greentube.com>"
+  ],
+  "description": "Javascript Tutorial",
+  "keywords": [
+    "javascript",
+    "repl",
+    "js",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.5.0-rc.0",
+    "codemirror": "~5.10.0",
+    "angular-material": "~1.0.1",
+    "jquery": "~2.1.4",
+    "angular-ui-layout": "~1.4.1"
+  }
+}

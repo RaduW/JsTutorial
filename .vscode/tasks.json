@@ -6,6 +6,12 @@
 // ${fileExtname}: the current opened file's extension
 // ${cwd}: the current working directory of the spawned process
 
+{
+	"version": "0.1.0",
+	"command": "gulp",
+	"isShellCommand": true
+}
+
 // A task runner that calls the Typescript compiler (tsc) and
 // Compiles a HelloWorld.ts program
 /*
@@ -56,7 +62,7 @@
 
 // A task runner configuration for gulp. Gulp provides a less task
 // which compiles less to css.
-
+/*
 {
 	"version": "0.1.0",
 	"command": "gulp",
@@ -81,7 +87,7 @@
 			"problemMatcher": "$lessCompile"
 		}
         
-	]
+	]*/
 }
 
 

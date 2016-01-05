@@ -14,6 +14,7 @@ namespace JsConsole {
         constructor() {
         }
         
+        
         loadScript(script:string):ScriptChunk[]{
             var retVal:ScriptChunk[] = [];
             

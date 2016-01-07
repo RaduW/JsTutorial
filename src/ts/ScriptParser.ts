@@ -14,8 +14,7 @@ namespace JsConsole {
     export class ScriptParser implements IScriptParser {
         constructor() {
         }
-        
-        
+                
         loadScript(script:string):ScriptChunk[]{
             var retVal:ScriptChunk[] = [];
             

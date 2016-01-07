@@ -44,18 +44,10 @@ gulp.task('less', function () {
 
 gulp.task('typescript', function () {
     console.log("transpiling typescript files to js");
-     del([                              //deleted generated file since they are readonly and can't be overriden
-         baseDir +'js/**/*.js',
-         '!'+baseDir +'js/require.js',   // do NOT delete config.js since this is not generated
-         '!'+baseDir +'js/config.js'   // do NOT delete config.js since this is not generated
-     ]);
-
-    return gulp.src( baseDir +'typescript/**/*.ts').
+    return gulp.src( baseDir +'ts/**/*.ts').
         pipe(tsCompiler({
             target: 'ES5',
-            module: 'amd'
         }))
-        .pipe(chmod(444))               //make generated files read only
         .pipe(gulp.dest(baseDir +'js'));
 
 });

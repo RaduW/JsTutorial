@@ -1,5 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
+//angular.module('jsConsole',[]);
 namespace JsConsole {
     'use strict';
 
@@ -9,7 +10,6 @@ namespace JsConsole {
 
     export interface IScriptParser {
         loadScript(script:string):ScriptChunk[];
-        
     }
     export class ScriptParser implements IScriptParser {
         constructor() {

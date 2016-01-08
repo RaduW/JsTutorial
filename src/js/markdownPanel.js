@@ -7,11 +7,11 @@ var JsTutorial;
             this.$sce = $sce;
             var self = this;
             self.api = self; //expose the API
-            self.documentContent = self.$sce.trustAsHtml("<div>Initial Content</div>");
+            self.documentContent = "# This is a header \n\nthis is some text\n## This is a h2\n\n* a point\n* and another one\n   *";
         }
-        MarkdownPanelController.prototype.newDoc = function (documentContent) {
+        MarkdownPanelController.prototype.setContent = function (documentContent) {
             var self = this;
-            self.documentContent = self.$sce.trustAsHtml(documentContent);
+            self.documentContent = documentContent; //self.$sce.trustAsHtml(documentContent);
         };
         MarkdownPanelController.$inject = ['$sce'];
         return MarkdownPanelController;

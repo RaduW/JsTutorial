@@ -4,7 +4,7 @@
 namespace JsTutorial {
 
     export interface IMarkdownPanel{
-        //export here the api
+        setContent(documentContent:string):void;
     }
 
     class MarkdownPanelController implements IMarkdownPanel{
@@ -16,12 +16,12 @@ namespace JsTutorial {
         constructor(private $sce:ng.ISCEService){
             var self = this;
             self.api = self;  //expose the API
-            self.documentContent = self.$sce.trustAsHtml("<div>Initial Content</div>");
+            self.documentContent = "# This is a header \n\nthis is some text\n## This is a h2\n\n* a point\n* and another one\n   *";
         }
 
-        newDoc(documentContent:string){
+        public setContent(documentContent:string):void{
             var self = this;
-            self.documentContent = self.$sce.trustAsHtml(documentContent);
+            self.documentContent = documentContent;//self.$sce.trustAsHtml(documentContent);
         }
     }
 

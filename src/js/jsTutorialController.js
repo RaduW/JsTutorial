@@ -3,9 +3,14 @@
 var JsTutorial;
 (function (JsTutorial) {
     var JsTutorialController = (function () {
-        function JsTutorialController($scope) {
+        function JsTutorialController() {
             var vm = this;
         }
+        JsTutorialController.prototype.onSetSomeContent = function () {
+            var self = this;
+            if (self.markdownPanel)
+                self.markdownPanel.setContent("# This is a header ");
+        };
         JsTutorialController.prototype.onPrevious = function () {
             var vm = this;
         };
@@ -15,5 +20,5 @@ var JsTutorial;
         JsTutorialController.$import = ["$scope"];
         return JsTutorialController;
     })();
-    angular.module("modificationEditor").controller("modificationEditor", JsTutorialController);
+    angular.module("jsTutorial").controller("jsTutorialController", JsTutorialController);
 })(JsTutorial || (JsTutorial = {}));

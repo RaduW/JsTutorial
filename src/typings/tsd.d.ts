@@ -3,3 +3,4 @@
 /// <reference path="codemirror/codemirror.d.ts" />
 /// <reference path="jquery/jquery.d.ts" />
 /// <reference path="lodash/lodash.d.ts" />
+/// <reference path="highlightjs/highlightjs.d.ts" />

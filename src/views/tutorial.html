@@ -1,0 +1,35 @@
+<!--div layout="column" layout-fill ng-controller="modificationEditor as me"-->
+<div layout="column" layout-fill ng-controller='jsTutorialController as jt'>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Settings">
+                <i class="fa fa-align-justify fa-lg"></i>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Login" >
+                <i class="fa fa-sign-in fa-lg"></i>
+            </md-button>
+            <span flex=""></span>
+
+            <h2>
+                <span>Js Tutorial</span>
+            </h2>
+            <span flex=""></span>
+             <md-button class="md-icon-button" aria-label="Favorite" >
+                <i class="fa fa-chevron-left fa-lg"></i>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="More" >
+                <i class="fa fa-chevron-right fa-lg"></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+        <div ui-layout="{flow : 'column'}">
+            <div ui-layout-container>
+                <rw-markdown-panel api='jt.markdownPanel'/>
+            </div>
+            <div ui-layout-container>
+                <div>right</div>
+            </div>
+        </div>
+    </md-content>
+</div>

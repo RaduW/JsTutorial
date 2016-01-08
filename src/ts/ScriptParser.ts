@@ -1,6 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
-//angular.module('jsConsole',[]);
+
 namespace JsConsole {
     'use strict';
 
@@ -52,7 +52,6 @@ namespace JsConsole {
             return retVal;
         }
     }
-
     angular
         .module('jsConsole')
         .service('scriptParser', ScriptParser);

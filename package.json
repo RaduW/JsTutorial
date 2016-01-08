@@ -1,7 +1,7 @@
 {
-  "name": "soforModificationEditor",
+  "name": "jsTutorial",
   "version": "0.0.1",
-  "description": "Sofor Modification Editor",
+  "description": "Java Script Tutorial",
   "main": "\"\"",
   "dependencies": {},
   "devDependencies": {
@@ -16,6 +16,7 @@
     "gulp-tsd": "0.0.4",
     "gulp-typescript": "^2.6.0",
     "gulp-util": "^3.0.7",
+    "http-server": "^0.8.5",
     "jasmine-core": "^2.3.4",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.12",

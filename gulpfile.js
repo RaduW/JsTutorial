@@ -27,20 +27,25 @@ var baseDir = './src/';
 //     console.log("running the defaultTask with it's dependencies");
 // });
 //
-// gulp.task('less', function () {
-//     console.log("building css from less files");
-//     return gulp.src(baseDir + 'less/**/*.less')
-//         .pipe(less({
-//             paths: [path.join(baseDir, 'less')]
-//         }))
-//         .pipe(autoprefixer({
-//             browsers: ['last 2 versions']
-//         }))
-//         .pipe(gulp.dest(baseDir +'css'))
-//         .pipe(minifyCss())
-//         .pipe(rename({suffix: '.min'}))
-//         .pipe(gulp.dest(baseDir +'css'));
-// });
+
+gulp.task('server', function(){
+    
+});
+
+gulp.task('less', function () {
+    console.log("building css from less files");
+    return gulp.src(baseDir + 'less/**/*.less')
+        .pipe(less({
+            paths: [path.join(baseDir, 'less')]
+        }))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions']
+        }))
+        .pipe(gulp.dest(baseDir +'css'))
+        .pipe(minifyCss())
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(baseDir +'css'));
+});
 
 gulp.task('typescript', function () {
     console.log("transpiling typescript files to js");
@@ -62,6 +67,9 @@ gulp.task('tsd', function (callback) {
 // fetches all bower dependencies (from bower.json)
 gulp.task('bower', function(){
     console.log("fetching bower dependencies (listed in bower.json)");
+    gulp.src( './manual_download/**/*').
+        pipe(gulp.dest(baseDir +'lib/'));
+
     bower()
         .pipe(gulp.dest('bower_components/'));
 
@@ -71,7 +79,7 @@ gulp.task('bower', function(){
 });
 
 gulp.task('copyDirectiveTemplates', function () {
-    return gulp.src( baseDir +'typescript/**/*.html')
+    return gulp.src( baseDir +'ts/**/*.html')
         .pipe(gulp.dest(baseDir +'js'));
 });
 
@@ -79,8 +87,6 @@ gulp.task('copyDirectiveTemplates', function () {
 gulp.task('dependencies', ['tsd','bower'],function () {
     console.log("fetching all dependencies");
 });
-
-
 
 function runKarma(configFilePath, options, cb) {
 
@@ -120,7 +126,7 @@ gulp.task('test-watch', function(cb) {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(baseDir + 'typescript/**/*.ts', ['typescript']);
-    gulp.watch(baseDir + 'typescript/**/*.html', ['copyDirectiveTemplates'])
+    gulp.watch(baseDir + 'ts/**/*.ts', ['typescript']);
+    gulp.watch(baseDir + 'ts/**/*.html', ['copyDirectiveTemplates'])
     gulp.watch(baseDir + 'less/**/*.less', ['less'])
 });

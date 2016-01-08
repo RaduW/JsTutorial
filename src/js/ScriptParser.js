@@ -49,5 +49,5 @@ var JsConsole;
     JsConsole.ScriptParser = ScriptParser;
     angular
         .module('jsConsole')
-        .service('ScriptParser', ScriptParser);
+        .service('scriptParser', ScriptParser);
 })(JsConsole || (JsConsole = {}));

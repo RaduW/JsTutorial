@@ -23,24 +23,24 @@ var gulp = require('gulp'),
 
 var baseDir = './src/';
 
-gulp.task('default', ['typescript'], function () {
-    console.log("running the defaultTask with it's dependencies");
-});
-
-gulp.task('less', function () {
-    console.log("building css from less files");
-    return gulp.src(baseDir + 'less/**/*.less')
-        .pipe(less({
-            paths: [path.join(baseDir, 'less')]
-        }))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions']
-        }))
-        .pipe(gulp.dest(baseDir +'css'))
-        .pipe(minifyCss())
-        .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(baseDir +'css'));
-});
+// gulp.task('default', ['typescript'], function () {
+//     console.log("running the defaultTask with it's dependencies");
+// });
+//
+// gulp.task('less', function () {
+//     console.log("building css from less files");
+//     return gulp.src(baseDir + 'less/**/*.less')
+//         .pipe(less({
+//             paths: [path.join(baseDir, 'less')]
+//         }))
+//         .pipe(autoprefixer({
+//             browsers: ['last 2 versions']
+//         }))
+//         .pipe(gulp.dest(baseDir +'css'))
+//         .pipe(minifyCss())
+//         .pipe(rename({suffix: '.min'}))
+//         .pipe(gulp.dest(baseDir +'css'));
+// });
 
 gulp.task('typescript', function () {
     console.log("transpiling typescript files to js");
@@ -52,9 +52,11 @@ gulp.task('typescript', function () {
 
 });
 
-gulp.task('tsd', function(){
-    console.log("fetching the typescript definition files (listed in t)");
-
+gulp.task('tsd', function (callback) {
+    tsd({
+        command: 'reinstall',
+        config: './tsd.json'
+    }, callback);
 });
 
 // fetches all bower dependencies (from bower.json)
@@ -69,12 +71,8 @@ gulp.task('bower', function(){
 });
 
 gulp.task('copyDirectiveTemplates', function () {
-    del(baseDir +'js/**/*.html');   //deleted generated file since they are readonly and can't be overriden
-
     return gulp.src( baseDir +'typescript/**/*.html')
-        .pipe(chmod(444))            // make generated files readonly
         .pipe(gulp.dest(baseDir +'js'));
-
 });
 
 

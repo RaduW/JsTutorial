@@ -55,5 +55,5 @@ namespace JsConsole {
 
     angular
         .module('jsConsole')
-        .service('ScriptParser', ScriptParser);
+        .service('scriptParser', ScriptParser);
 }

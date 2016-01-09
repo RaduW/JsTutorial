@@ -22,6 +22,7 @@ namespace JsTutorial {
         //documentContent: string;
         _editorOptions: CodeMirror.EditorConfiguration;
         editor: CodeMirror.Editor;
+        currentReadOnlyArea: CodeMirror.TextMarker;
 
         static $inject:string[]=[];
 
@@ -65,11 +66,22 @@ namespace JsTutorial {
             if ( self.editor){
                 let doc = self.editor.getDoc();
                 let numLines = doc.lineCount();
-                doc.markText({line:0, ch:0},{line:numLines,ch:0},{readOnly:true, css:"color:#aaa"});
+                let existingMarks = doc.getAllMarks();
+                if ( existingMarks)
+                    existingMarks.forEach( (marker)=> {marker.clear();});
+                    
+                //TODO remove css entry (only className should be used with a more specific selector)
+                doc.markText({line:0, ch:0},{line:numLines,ch:0},{readOnly:true, css:"color:#aaa", className:"readOnlyText"});
                 
                 doc.replaceRange("\n>>>",{line:numLines,ch:0},{line:numLines,ch:0});
                 doc.markText({line:0, ch:0},{line:numLines+1,ch:0},{readOnly:true});
             }
+        }
+        
+        private extendMark():void{
+            var self = this;
+            if ( self.currentReadOnlyArea)
+                self.currentReadOnlyArea.clear();
         }
     }
 

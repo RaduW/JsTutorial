@@ -41,10 +41,19 @@ var JsTutorial;
             if (self.editor) {
                 var doc = self.editor.getDoc();
                 var numLines = doc.lineCount();
-                doc.markText({ line: 0, ch: 0 }, { line: numLines, ch: 0 }, { readOnly: true, css: "color:#aaa" });
+                var existingMarks = doc.getAllMarks();
+                if (existingMarks)
+                    existingMarks.forEach(function (marker) { marker.clear(); });
+                //TODO remove css entry (only className should be used with a more specific selector)
+                doc.markText({ line: 0, ch: 0 }, { line: numLines, ch: 0 }, { readOnly: true, css: "color:#aaa", className: "readOnlyText" });
                 doc.replaceRange("\n>>>", { line: numLines, ch: 0 }, { line: numLines, ch: 0 });
                 doc.markText({ line: 0, ch: 0 }, { line: numLines + 1, ch: 0 }, { readOnly: true });
             }
+        };
+        JsConsolePanelController.prototype.extendMark = function () {
+            var self = this;
+            if (self.currentReadOnlyArea)
+                self.currentReadOnlyArea.clear();
         };
         JsConsolePanelController.$inject = [];
         return JsConsolePanelController;

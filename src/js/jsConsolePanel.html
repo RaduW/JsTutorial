@@ -1,6 +1,5 @@
-<div class="console-panel">
-    <md-content>
-        <h3>Console panel comes here</h3>
-        <ui-codemirror></ui-codemirror>
+<div class="console-panel"  layout="column" layout-fill>
+    <md-content  layout="row" layout-fill>
+        <div ui-codemirror ="{ onLoad : jc.codemirrorLoaded }" ui-codemirror-opts="jc.editorOptions" layout="column" layout-fill></div>
     </md-content>
 </div>

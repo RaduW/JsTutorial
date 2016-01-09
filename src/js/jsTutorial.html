@@ -13,12 +13,20 @@
                 <span>Js Tutorial</span>
             </h2>
             <span flex=""></span>
-             <md-button class="md-icon-button" aria-label="Favorite" >
+             <md-button class="md-icon-button" aria-label="Previous" >
                 <i class="fa fa-chevron-left fa-lg"></i>
             </md-button>
-            <md-button class="md-icon-button" aria-label="More" >
+            <md-button class="md-icon-button" aria-label="Next" >
                 <i class="fa fa-chevron-right fa-lg"></i>
             </md-button>
+            
+            <md-button class="md-icon-button" aria-label="Run"  ng-click="jt.onRun()">
+                <i class="fa fa-play fa-lg"></i>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="Clear"  ng-click="jt.onClear()">
+                <i class="fa fa-eraser fa-lg"></i>
+            </md-button>
+            
         </div>
     </md-toolbar>
     <md-content flex>
@@ -27,7 +35,7 @@
                 <rw-markdown-panel api='jt.markdownPanel'/>
             </div>
             <div ui-layout-container>
-                <rw-js-console-panel api='jt.consolePanel'>
+                <rw-js-console-panel  api='jt.jsConsolePanel' />
             </div>
         </div>
     </md-content>

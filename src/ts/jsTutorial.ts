@@ -10,6 +10,7 @@ namespace JsTutorial {
 
         static $import = ["$scope"];
         public markdownPanel:IMarkdownPanel; //set from template
+        public jsConsolePanel : IJsConsolePanel; //set from the template
         
         constructor( ) {
             var vm = this;
@@ -22,10 +23,21 @@ namespace JsTutorial {
         }
         
         onPrevious():void {
-            var vm = this;
+            var self = this;
         }
         onNext():void{
-            var vm = this;
+            var self = this;
+        }
+        
+        onClear():void{
+            var self = this;
+            if ( self.jsConsolePanel)
+                self.jsConsolePanel.clear();
+        }
+        onRun():void{
+            var self = this;
+            if ( self.jsConsolePanel)
+                self.jsConsolePanel.makeAllReadOnly();
         }
     }
 

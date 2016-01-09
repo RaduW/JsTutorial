@@ -12,10 +12,20 @@ var JsTutorial;
                 self.markdownPanel.setContent("# This is a header ");
         };
         JsTutorialController.prototype.onPrevious = function () {
-            var vm = this;
+            var self = this;
         };
         JsTutorialController.prototype.onNext = function () {
-            var vm = this;
+            var self = this;
+        };
+        JsTutorialController.prototype.onClear = function () {
+            var self = this;
+            if (self.jsConsolePanel)
+                self.jsConsolePanel.clear();
+        };
+        JsTutorialController.prototype.onRun = function () {
+            var self = this;
+            if (self.jsConsolePanel)
+                self.jsConsolePanel.makeAllReadOnly();
         };
         JsTutorialController.$import = ["$scope"];
         return JsTutorialController;

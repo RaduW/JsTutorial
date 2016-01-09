@@ -4,7 +4,7 @@
 <head>
     <base href="." target="_self" />
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="lib/angular-ui-layout/ui-layout.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/angular-ui-layout/src/ui-layout.css"/>
     <link rel="stylesheet" type="text/css" href="lib/angular-material/angular-material.css"/>
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap-theme.css"/>
@@ -24,19 +24,19 @@
     <script src="lib/angular-animate/angular-animate.js" ></script>
     <script src="lib/angular-aria/angular-aria.js" ></script>
     <script src="lib/angular-material/angular-material.js" ></script>
-    <script src="lib/angular-ui-layout/ui-layout.js" ></script>
+    <script src="lib/angular-ui-layout/src/ui-layout.js" ></script>
     <script src="lib/angular-marked/dist/angular-marked.js"></script>
     <script src="lib/angular-ui-codemirror/ui-codemirror.js"></script>
     
     <!-- jsTutorial files -->
     <script src="js/jsConsole.module.js"></script>
     <script src="js/jsTutorial.module.js"></script>
-    <script src="js/jsTutorialController.js"></script>
+    <script src="js/jsTutorial.js"></script>
     <script src="js/ScriptParser.js"></script>
     <script src="js/markdownPanel.js"></script>
 
 </head>
 <body ng-app="jsTutorial">
-    <ng-include src="'views/tutorial.html'"/>
+    <rw-js-tutorial/>
 </body>
 </html>

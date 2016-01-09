@@ -41,8 +41,9 @@ var JsTutorial;
             if (self.editor) {
                 var doc = self.editor.getDoc();
                 var numLines = doc.lineCount();
-                doc.markText({ line: 0, ch: 0 }, { line: numLines, ch: 0 }, { readOnly: true, css: "background-color:#eee" });
-                doc.replaceRange("\nhello", { line: numLines, ch: 0 }, { line: numLines, ch: 0 });
+                doc.markText({ line: 0, ch: 0 }, { line: numLines, ch: 0 }, { readOnly: true, css: "color:#aaa" });
+                doc.replaceRange("\n>>>", { line: numLines, ch: 0 }, { line: numLines, ch: 0 });
+                doc.markText({ line: 0, ch: 0 }, { line: numLines + 1, ch: 0 }, { readOnly: true });
             }
         };
         JsConsolePanelController.$inject = [];

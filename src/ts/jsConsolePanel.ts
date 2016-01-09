@@ -65,9 +65,10 @@ namespace JsTutorial {
             if ( self.editor){
                 let doc = self.editor.getDoc();
                 let numLines = doc.lineCount();
-                doc.markText({line:0, ch:0},{line:numLines,ch:0},{readOnly:true, css:"background-color:#eee"});
+                doc.markText({line:0, ch:0},{line:numLines,ch:0},{readOnly:true, css:"color:#aaa"});
                 
-                doc.replaceRange("\nhello",{line:numLines,ch:0},{line:numLines,ch:0});
+                doc.replaceRange("\n>>>",{line:numLines,ch:0},{line:numLines,ch:0});
+                doc.markText({line:0, ch:0},{line:numLines+1,ch:0},{readOnly:true});
             }
         }
     }

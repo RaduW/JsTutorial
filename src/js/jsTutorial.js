@@ -4,7 +4,8 @@ var JsTutorial;
 (function (JsTutorial) {
     var JsTutorialController = (function () {
         function JsTutorialController() {
-            var vm = this;
+            var self = this;
+            self.sandboxOn = true;
         }
         JsTutorialController.prototype.onSetSomeContent = function () {
             var self = this;
@@ -17,6 +18,12 @@ var JsTutorial;
         JsTutorialController.prototype.onNext = function () {
             var self = this;
         };
+        JsTutorialController.prototype.onSandbox = function (sandboxOn) {
+            var self = this;
+            self.sandboxOn = sandboxOn;
+            if (self.jsConsolePanel)
+                self.jsConsolePanel.setSandboxMode(sandboxOn);
+        };
         JsTutorialController.prototype.onClear = function () {
             var self = this;
             if (self.jsConsolePanel)
@@ -25,7 +32,7 @@ var JsTutorial;
         JsTutorialController.prototype.onRun = function () {
             var self = this;
             if (self.jsConsolePanel)
-                self.jsConsolePanel.makeAllReadOnly();
+                self.jsConsolePanel.executeContent();
         };
         JsTutorialController.$import = ["$scope"];
         return JsTutorialController;

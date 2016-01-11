@@ -11,9 +11,11 @@ namespace JsTutorial {
         static $import = ["$scope"];
         public markdownPanel:IMarkdownPanel; //set from template
         public jsConsolePanel : IJsConsolePanel; //set from the template
+        public sandboxOn: boolean
         
         constructor( ) {
-            var vm = this;
+            var self = this;
+            self.sandboxOn = true;
         }
         
         onSetSomeContent(){
@@ -29,6 +31,13 @@ namespace JsTutorial {
             var self = this;
         }
         
+        onSandbox(sandboxOn:boolean){
+            var self = this;
+            self.sandboxOn = sandboxOn;
+            if ( self.jsConsolePanel)
+                self.jsConsolePanel.setSandboxMode(sandboxOn);
+        }
+        
         onClear():void{
             var self = this;
             if ( self.jsConsolePanel)
@@ -37,7 +46,7 @@ namespace JsTutorial {
         onRun():void{
             var self = this;
             if ( self.jsConsolePanel)
-                self.jsConsolePanel.makeAllReadOnly();
+                self.jsConsolePanel.executeContent();
         }
     }
 

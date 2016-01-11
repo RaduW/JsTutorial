@@ -13,6 +13,7 @@ var JsTutorial;
             };
             var self = this;
             self.api = self; //expose the API
+            self.sandboxOn = true;
             self._editorOptions = {
                 mode: 'javascript',
                 smartIndent: true,
@@ -22,6 +23,10 @@ var JsTutorial;
                 autofocus: true,
             };
         }
+        JsConsolePanelController.prototype.setSandboxMode = function (sandboxOn) {
+            var self = this;
+            self.sandboxOn = sandboxOn;
+        };
         Object.defineProperty(JsConsolePanelController.prototype, "editorOptions", {
             get: function () {
                 return this._editorOptions;
@@ -29,6 +34,34 @@ var JsTutorial;
             enumerable: true,
             configurable: true
         });
+        JsConsolePanelController.prototype.executeContent = function () {
+            var self = this;
+            var retVal;
+            if (self.editor) {
+                var message = null;
+                var content = self.getContent();
+                if (content) {
+                    try {
+                        if (self.sandboxOn)
+                            retVal = eval.call(window, content);
+                        else
+                            retVal = eval(content);
+                        message = "\n" + retVal;
+                    }
+                    catch (exception) {
+                        if (exception.stack) {
+                            message = "\n" + exception.stack;
+                        }
+                        else {
+                            message = "\nError: " + exception;
+                        }
+                    }
+                }
+                if (message) {
+                    self.addConsoleOutput(message);
+                }
+            }
+        };
         JsConsolePanelController.prototype.getLastReadonlyPosition = function () {
             var self = this;
             var lastReadonlyPosition = { line: 0, ch: 0 };
@@ -65,7 +98,7 @@ var JsTutorial;
             if (self.editor) {
                 var doc = self.editor.getDoc();
                 var lineStart = doc.lineCount();
-                outputContent = "\n{outputContent}";
+                outputContent = "\n" + outputContent;
                 doc.replaceRange(outputContent, { line: lineStart, ch: 0 }, { line: lineStart, ch: 0 });
                 var lineEnd = doc.lineCount();
                 doc.markText({ line: 0, ch: 0 }, { line: lineEnd, ch: 0 }, { readOnly: true, css: "color:#aaa; font-style:italic", className: "readOnlyText" });

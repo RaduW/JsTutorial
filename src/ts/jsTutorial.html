@@ -12,8 +12,21 @@
             <h2>
                 <span>Js Tutorial</span>
             </h2>
+
+            
             <span flex=""></span>
-             <md-button class="md-icon-button" aria-label="Previous" >
+
+            <md-button class="md-icon-button" aria-label="sandboxOff" ng-show='!jt.sandboxOn' ng-click='jt.onSandbox(true)'>
+                <span class="fa-stack fa">
+                    <i class="fa fa-archive fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x" ng-style="{color: 'red'}"></i>
+                </span>
+            </md-button>
+            <md-button class="md-icon-button" aria-label="sandboxOn" ng-show='jt.sandboxOn' ng-click='jt.onSandbox(false)' >
+                <i class="fa fa-archive fa-lg"></i>
+            </md-button>
+
+            <md-button class="md-icon-button" aria-label="Previous" >
                 <i class="fa fa-chevron-left fa-lg"></i>
             </md-button>
             <md-button class="md-icon-button" aria-label="Next" >

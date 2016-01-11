@@ -21,6 +21,11 @@ namespace JsTutorial {
         
         // adds console output information
         addConsoleOutput(outputContent:string):void;
+        
+        // executes the currently typed content
+        executeContent():void;
+        
+        setSandboxMode(sandboxMode:boolean):void;
     }
 
     class JsConsolePanelController implements IJsConsolePanel{
@@ -29,12 +34,14 @@ namespace JsTutorial {
         _editorOptions: CodeMirror.EditorConfiguration;
         editor: CodeMirror.Editor;
         currentReadOnlyArea: CodeMirror.TextMarker;
+        sandboxOn:boolean;
 
         static $inject:string[]=[];
 
         constructor(){
             var self = this;
             self.api = self;  //expose the API
+            self.sandboxOn = true;
             
             self._editorOptions = {
                 mode: 'javascript',
@@ -46,6 +53,11 @@ namespace JsTutorial {
             }
         }
 
+        public setSandboxMode(sandboxOn:boolean):void{
+            var self = this;
+            self.sandboxOn = sandboxOn;
+        }
+                
         public codemirrorLoaded = ( editor : CodeMirror.Editor) =>{
             var self = this;
             
@@ -57,6 +69,37 @@ namespace JsTutorial {
         public get editorOptions(): CodeMirror.EditorConfiguration{
             return this._editorOptions;
         } 
+        
+        public executeContent():void{
+            var self = this;
+            var retVal;
+            if (self.editor) {
+                let message = null;
+                var content = self.getContent();
+                if (content) {
+                    try {
+                        if ( self.sandboxOn)
+                            retVal = eval.call(window, content);
+                        else
+                            retVal = eval(content);
+                            
+                        message = "\n" + retVal ;
+                    }
+                    catch (exception) {
+                        if ( exception.stack){
+                            message = `\n${exception.stack}`;
+                        }
+                        else{
+                            message = `\nError: ${exception}`;
+                        }
+                    }
+                }
+                if ( message){
+                    self.addConsoleOutput(message);
+                }
+            }
+        }
+        
         
         private getLastReadonlyPosition(){
             var self = this;
@@ -99,7 +142,7 @@ namespace JsTutorial {
             if ( self.editor){
                 let doc = self.editor.getDoc();
                 let lineStart = doc.lineCount();
-                outputContent = `\n{outputContent}`;
+                outputContent = `\n${outputContent}`;
                 doc.replaceRange(outputContent,{line:lineStart,ch:0},{line:lineStart,ch:0});
                 let lineEnd = doc.lineCount()
                 doc.markText({line:0, ch:0},{line:lineEnd,ch:0},{readOnly:true, css:"color:#aaa; font-style:italic", className:"readOnlyText"});

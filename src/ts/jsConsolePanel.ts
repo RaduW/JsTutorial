@@ -64,7 +64,9 @@ namespace JsTutorial {
             
             self.editor = editor;
             self.editor.setSize('100%','100%');
-            self.makeAllReadOnly();
+            let doc = editor.getDoc();
+            doc.replaceRange(`${self.cursor}`,{line:0,ch:0},{line:0,ch:0});
+            doc.markText({line:0, ch:0},{line:1,ch:0},{readOnly:true});
         }        
         
         public get editorOptions(): CodeMirror.EditorConfiguration{

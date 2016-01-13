@@ -5,7 +5,7 @@ var JsTutorial;
     var JsConsolePanelController = (function () {
         function JsConsolePanelController() {
             var _this = this;
-            this.cursor = ''; // set it to whatever you want to appear as the console cursor
+            this.cursor = '>'; // set it to whatever you want to appear as the console cursor
             this.codemirrorLoaded = function (editor) {
                 var self = _this;
                 self.editor = editor;

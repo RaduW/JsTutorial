@@ -35,7 +35,7 @@ namespace JsTutorial {
         editor: CodeMirror.Editor;
         currentReadOnlyArea: CodeMirror.TextMarker;
         sandboxOn:boolean;
-        cursor = ''; // set it to whatever you want to appear as the console cursor
+        cursor = '>'; // set it to whatever you want to appear as the console cursor
 
         static $inject:string[]=[];
 

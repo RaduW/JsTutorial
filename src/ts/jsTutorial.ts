@@ -13,10 +13,11 @@ namespace JsTutorial {
         public sandboxOn: boolean;
         private numSlides: number;
         private currentSlide: number;
+        private slides: JsConsole.ScriptChunk[];
         
         
-        static $import = ['hotkeys'];
-        constructor( hotkeys: ng.hotkeys.HotkeysProvider) {
+        static $import = ['hotkeys','scriptLoader'];
+        constructor( hotkeys: ng.hotkeys.HotkeysProvider,private scriptLoader:JsConsole.IScriptLoader) {
             var self = this;
             self.sandboxOn = true;
             
@@ -45,14 +46,22 @@ namespace JsTutorial {
 
             });
             hotkeys.add({
-                combo: "ctrl+shift+del",
+                combo: "alt+del",
                 description: "clear javascript panel",
                 callback: (event, hotkey) => { self.onClear()},
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
 
             });
+            
+            self.scriptLoader.loadScript('js/course.js').then((response: JsConsole.ScriptChunk[]) => {
+                if ( response){
+                    self.slides = response;
+                    self.numSlides = response.length;
+                }
+            });
+
         }
-        
+       
         onMenu(){
             var self = this;
             if ( self.markdownPanel)

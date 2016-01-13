@@ -3,7 +3,8 @@
 var JsTutorial;
 (function (JsTutorial) {
     var JsTutorialController = (function () {
-        function JsTutorialController(hotkeys) {
+        function JsTutorialController(hotkeys, scriptLoader) {
+            this.scriptLoader = scriptLoader;
             var self = this;
             self.sandboxOn = true;
             self.currentSlide = 0;
@@ -27,10 +28,16 @@ var JsTutorial;
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
             hotkeys.add({
-                combo: "ctrl+shift+del",
+                combo: "alt+del",
                 description: "clear javascript panel",
                 callback: function (event, hotkey) { self.onClear(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
+            self.scriptLoader.loadScript('js/course.js').then(function (response) {
+                if (response) {
+                    self.slides = response;
+                    self.numSlides = response.length;
+                }
             });
         }
         JsTutorialController.prototype.onMenu = function () {
@@ -60,7 +67,7 @@ var JsTutorial;
             if (self.jsConsolePanel)
                 self.jsConsolePanel.executeContent();
         };
-        JsTutorialController.$import = ['hotkeys'];
+        JsTutorialController.$import = ['hotkeys', 'scriptLoader'];
         return JsTutorialController;
     })();
     var JsTutorialDirective = (function () {

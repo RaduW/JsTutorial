@@ -10,10 +10,11 @@ namespace JsTutorial {
     class MarkdownPanelController implements IMarkdownPanel{
         api: IMarkdownPanel; //variable to expose the api
         documentContent: string;
+        
 
-        static $inject=['$sce'];
+        static $inject=[];
 
-        constructor(private $sce:ng.ISCEService){
+        constructor(){
             var self = this;
             self.api = self;  //expose the API
             self.documentContent = `# This is a header 

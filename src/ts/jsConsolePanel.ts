@@ -35,6 +35,7 @@ namespace JsTutorial {
         editor: CodeMirror.Editor;
         currentReadOnlyArea: CodeMirror.TextMarker;
         sandboxOn:boolean;
+        cursor = ''; // set it to whatever you want to appear as the console cursor
 
         static $inject:string[]=[];
 
@@ -83,7 +84,7 @@ namespace JsTutorial {
                         else
                             retVal = eval(content);
                             
-                        message = "\n" + retVal ;
+                        message = "" + retVal ;
                     }
                     catch (exception) {
                         if ( exception.stack){
@@ -146,7 +147,7 @@ namespace JsTutorial {
                 doc.replaceRange(outputContent,{line:lineStart,ch:0},{line:lineStart,ch:0});
                 let lineEnd = doc.lineCount()
                 doc.markText({line:0, ch:0},{line:lineEnd,ch:0},{readOnly:true, css:"color:#aaa; font-style:italic", className:"readOnlyText"});
-                doc.replaceRange("\n>>>",{line:lineEnd,ch:0},{line:lineEnd,ch:0});
+                doc.replaceRange(`\n${self.cursor}`,{line:lineEnd,ch:0},{line:lineEnd,ch:0});
                 doc.markText({line:0, ch:0},{line:lineEnd+1,ch:0},{readOnly:true});
             }
 
@@ -175,7 +176,7 @@ namespace JsTutorial {
                 //TODO remove css entry (only className should be used with a more specific selector)
                 doc.markText({line:0, ch:0},{line:numLines,ch:0},{readOnly:true, css:"color:#aaa", className:"readOnlyText"});
                 
-                doc.replaceRange("\n>>>",{line:numLines,ch:0},{line:numLines,ch:0});
+                doc.replaceRange(`\n${self.cursor}`,{line:numLines,ch:0},{line:numLines,ch:0});
                 doc.markText({line:0, ch:0},{line:numLines+1,ch:0},{readOnly:true});
             }
         }

@@ -1,7 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 "use strict";
 
-angular.module('jsTutorial',['jsConsole','ui.layout', 'hc.marked', 'ngMaterial']).config(['markedProvider', function (markedProvider:any) {
+angular.module('jsTutorial',['jsConsole','ui.layout', 'hc.marked', 'ngMaterial', 'cfp.hotkeys']).config(['markedProvider','hotkeysProvider', function (markedProvider:any, hotkeysProvider:ng.hotkeys.HotkeysProvider) {
   markedProvider.setOptions({
     gfm: true,
     tables: true,
@@ -13,4 +13,6 @@ angular.module('jsTutorial',['jsConsole','ui.layout', 'hc.marked', 'ngMaterial']
       }
     }
   });
+  //hotkeysProvider.cheatSheetHotkey = "ctrl+?";
+  
 }]);;

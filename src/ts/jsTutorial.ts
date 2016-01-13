@@ -8,17 +8,52 @@ namespace JsTutorial {
 
     class JsTutorialController implements IJsTutorialController  {
 
-        static $import = ["$scope"];
         public markdownPanel:IMarkdownPanel; //set from template
         public jsConsolePanel : IJsConsolePanel; //set from the template
-        public sandboxOn: boolean
+        public sandboxOn: boolean;
+        private numSlides: number;
+        private currentSlide: number;
         
-        constructor( ) {
+        
+        static $import = ['hotkeys'];
+        constructor( hotkeys: ng.hotkeys.HotkeysProvider) {
             var self = this;
             self.sandboxOn = true;
+            
+            self.currentSlide = 0;
+            self.numSlides = 0;
+            
+            hotkeys.add({
+                combo: "ctrl+enter",
+                description: "Execute javascript",
+                callback: (event, hotkey) => { self.onRun()},
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+
+            });
+            hotkeys.add({
+                combo: "ctrl+<",
+                description: "Previous slide",
+                callback: (event, hotkey) => { self.onPrevious()},
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+
+            });
+            hotkeys.add({
+                combo: "ctrl+>",
+                description: "Next slide",
+                callback: (event, hotkey) => { self.onNext()},
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+
+            });
+            hotkeys.add({
+                combo: "ctrl+shift+del",
+                description: "clear javascript panel",
+                callback: (event, hotkey) => { self.onClear()},
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+
+            });
         }
         
-        onSetSomeContent(){
+        onMenu(){
             var self = this;
             if ( self.markdownPanel)
                 self.markdownPanel.setContent( "# This is a header ");

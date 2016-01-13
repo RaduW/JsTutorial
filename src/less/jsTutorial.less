@@ -1,4 +1,96 @@
-.markdown-panel, .console-panel, .CodeMirror { font-size: x-large;}
+@gray-base:              #000;
+@gray-dark:              lighten(@gray-base, 20%);   // #333
+
+@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+@code-color:                  #c7254e;
+@code-bg:                     #f9f2f4;
+
+@kbd-color:                   #fff;
+@kbd-bg:                      #333;
+
+@pre-bg:                      #f8f8f0;
+@pre-color:                   @gray-dark;
+@pre-border-color:            #ccc;
+@pre-scrollable-max-height:   340px;
+
+@border-radius-base:        4px;
+@border-radius-small:       3px;
+
+@font-size-base:          14px;
+//** Unit-less `line-height` for use in components like buttons.
+@line-height-base:        1.428571429; // 20/14
+//** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
+@line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
+
+//
+// Code (inline and block)
+// --------------------------------------------------
+
+
+// Inline and block code styles
+code,
+kbd,
+pre,
+samp {
+  font-family: @font-family-monospace;
+}
+
+// Inline code
+code {
+  padding: 2px 4px;
+  //font-size: 90%;
+  color: @code-color;
+  background-color: @code-bg;
+  border-radius: @border-radius-base;
+}
+
+// User input typically entered via keyboard
+kbd {
+  padding: 2px 4px;
+  //font-size: 90%;
+  color: @kbd-color;
+  background-color: @kbd-bg;
+  border-radius: @border-radius-small;
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+
+  kbd {
+    padding: 0;
+    //font-size: 100%;
+    //font-weight: bold;
+    box-shadow: none;
+  }
+}
+
+// Blocks of code
+pre {
+  display: block;
+  //padding: ((@line-height-computed - 1) / 2);
+  margin: 0 0.5em (@line-height-computed / 2) 0.5em;
+  //font-size: (@font-size-base - 1); // 14px to 13px
+  line-height: @line-height-base;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: @pre-color;
+  background-color: @pre-bg;
+  border: 1px solid @pre-border-color;
+  border-radius: @border-radius-base;
+
+  // Account for some code outputs that place code tags in pre tags
+  code {
+    padding: 0;
+    //font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+  }
+}
+
+
+
+.markdown-panel, .console-panel, .CodeMirror { font-size: x-large; }
+.markdown-panel { padding: 0 0  0 0.5em;}
+.CodeMirror { background: @pre-bg;}
 
 .console-panel .readOnlyText { color: #aaa;}
 
@@ -36,3 +128,4 @@
 
 .cm-s-default .cm-error {color: #f00;}
 .cm-invalidchar {color: #f00;}
+

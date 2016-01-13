@@ -16,7 +16,29 @@ namespace JsTutorial {
         constructor(private $sce:ng.ISCEService){
             var self = this;
             self.api = self;  //expose the API
-            self.documentContent = "# This is a header \n\nthis is some text\n## This is a h2\n\n* a point\n* and another one\n   *";
+            self.documentContent = `# This is a header 
+
+this is some text
+## This is a h2
+
+* a point
+* and another one
+   * inside
+
+\`\`\`js
+    /*
+        some comment here
+    */
+    function f(){
+        //a line comment
+        this.a= 33;
+        var x = "abc";
+        return 145;
+    }
+\`\`\`
+Some text goes here
+
+`;
         }
 
         public setContent(documentContent:string):void{

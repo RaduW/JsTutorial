@@ -3,11 +3,37 @@
 var JsTutorial;
 (function (JsTutorial) {
     var JsTutorialController = (function () {
-        function JsTutorialController() {
+        function JsTutorialController(hotkeys) {
             var self = this;
             self.sandboxOn = true;
+            self.currentSlide = 0;
+            self.numSlides = 0;
+            hotkeys.add({
+                combo: "ctrl+enter",
+                description: "Execute javascript",
+                callback: function (event, hotkey) { self.onRun(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
+            hotkeys.add({
+                combo: "ctrl+<",
+                description: "Previous slide",
+                callback: function (event, hotkey) { self.onPrevious(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
+            hotkeys.add({
+                combo: "ctrl+>",
+                description: "Next slide",
+                callback: function (event, hotkey) { self.onNext(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
+            hotkeys.add({
+                combo: "ctrl+shift+del",
+                description: "clear javascript panel",
+                callback: function (event, hotkey) { self.onClear(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
         }
-        JsTutorialController.prototype.onSetSomeContent = function () {
+        JsTutorialController.prototype.onMenu = function () {
             var self = this;
             if (self.markdownPanel)
                 self.markdownPanel.setContent("# This is a header ");
@@ -34,7 +60,7 @@ var JsTutorial;
             if (self.jsConsolePanel)
                 self.jsConsolePanel.executeContent();
         };
-        JsTutorialController.$import = ["$scope"];
+        JsTutorialController.$import = ['hotkeys'];
         return JsTutorialController;
     })();
     var JsTutorialDirective = (function () {

@@ -1,16 +1,13 @@
 <div layout="column" layout-fill >
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <md-button class="md-icon-button" aria-label="Settings"  ng-click="jt.onSetSomeContent()">
+            <md-button class="md-icon-button" aria-label="Settings"  ng-click="jt.onMenu()">
                 <i class="fa fa-align-justify fa-lg"></i>
-            </md-button>
-            <md-button class="md-icon-button" aria-label="Login" >
-                <i class="fa fa-sign-in fa-lg"></i>
             </md-button>
             <span flex=""></span>
 
             <h2>
-                <span>Js Tutorial</span>
+                <span>Js Tutorial </span>
             </h2>
 
             
@@ -29,6 +26,7 @@
             <md-button class="md-icon-button" aria-label="Previous" >
                 <i class="fa fa-chevron-left fa-lg"></i>
             </md-button>
+            <span> {{jt.currentSlide+1}} / {{jt.numSlides}}</span>
             <md-button class="md-icon-button" aria-label="Next" >
                 <i class="fa fa-chevron-right fa-lg"></i>
             </md-button>

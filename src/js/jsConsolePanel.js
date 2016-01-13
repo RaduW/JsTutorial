@@ -114,8 +114,11 @@ var JsTutorial;
         };
         JsConsolePanelController.prototype.clear = function () {
             var self = this;
-            if (self.editor)
-                self.editor.getDoc().setValue("");
+            if (self.editor) {
+                var doc = self.editor.getDoc();
+                doc.setValue(self.cursor);
+                doc.markText({ line: 0, ch: 0 }, { line: 1, ch: 0 }, { readOnly: true });
+            }
         };
         JsConsolePanelController.prototype.makeAllReadOnly = function () {
             var self = this;

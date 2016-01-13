@@ -161,8 +161,11 @@ namespace JsTutorial {
         
         public clear():void{
             var self = this;
-            if ( self.editor)
-                self.editor.getDoc().setValue("");
+            if ( self.editor){
+                let doc =self.editor.getDoc();
+                doc.setValue(self.cursor);
+                doc.markText({line:0, ch:0},{line:1,ch:0},{readOnly:true});
+            }
         }
         
         public makeAllReadOnly():void{

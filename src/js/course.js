@@ -18,3 +18,9 @@ This is another test
 */
 var w;
 w;
+/*--
+A Comment
+*/
+/*--+
+Another comment
+*/ 

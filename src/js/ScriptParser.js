@@ -24,13 +24,15 @@ var JsConsole;
                 position += 4;
                 var addPreviousComment = script[position] == '+';
                 var beginOfDoc = script.indexOf("\n", position) + 1;
-                var endOfDoc = script.indexOf("*/", beginOfDoc) - 1;
-                position += endOfDoc + 3;
+                var endOfDoc = script.indexOf("*/", beginOfDoc);
+                position = endOfDoc + 3;
                 var beginOfScript = position;
-                var endOfScript = script.indexOf('/*--', position) - 1;
+                var endOfScript = script.indexOf('/*--', position);
+                var scriptChunk = null;
                 if (endOfScript < 0)
-                    endOfScript = scriptLength - 1;
-                var scriptChunk = script.substring(beginOfScript, endOfScript);
+                    scriptChunk = script.substring(beginOfScript);
+                else
+                    scriptChunk = script.substring(beginOfScript, endOfScript);
                 var docChunk = script.substring(beginOfDoc, endOfDoc);
                 if (addPreviousComment) {
                     //additive comment (the previous comment plus current comment, used in presentation style slides)
@@ -39,7 +41,7 @@ var JsConsole;
                         docChunk = retVal[retVal.length - 1].doc + "\n\n\n" + docChunk;
                     }
                 }
-                retVal.push(new ScriptChunk(script.substring(beginOfDoc, endOfDoc), scriptChunk));
+                retVal.push(new ScriptChunk(docChunk.trim(), scriptChunk.trim()));
             }
             return retVal;
         };

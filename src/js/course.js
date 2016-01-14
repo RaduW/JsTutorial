@@ -33,4 +33,6 @@ function test2() {
 test();
 /*--+
 Another comment
+
+And another one
 */

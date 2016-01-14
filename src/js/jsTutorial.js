@@ -16,13 +16,13 @@ var JsTutorial;
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
             hotkeys.add({
-                combo: "ctrl+<",
+                combo: "alt+p",
                 description: "Previous slide",
                 callback: function (event, hotkey) { self.onPrevious(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
             hotkeys.add({
-                combo: "ctrl+>",
+                combo: "alt+n",
                 description: "Next slide",
                 callback: function (event, hotkey) { self.onNext(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
@@ -37,9 +37,18 @@ var JsTutorial;
                 if (response) {
                     self.slides = response;
                     self.numSlides = response.length;
+                    self.currentSlide = 0;
+                    self.diplayCurrentSlide();
                 }
             });
         }
+        JsTutorialController.prototype.diplayCurrentSlide = function () {
+            var self = this;
+            if (self.currentSlide < self.numSlides) {
+                self.markdownPanel.setContent(self.slides[self.currentSlide].doc);
+                self.jsConsolePanel.setContent(self.slides[self.currentSlide].script);
+            }
+        };
         JsTutorialController.prototype.onMenu = function () {
             var self = this;
             if (self.markdownPanel)
@@ -47,9 +56,17 @@ var JsTutorial;
         };
         JsTutorialController.prototype.onPrevious = function () {
             var self = this;
+            if (self.currentSlide > 0) {
+                self.currentSlide--;
+                self.diplayCurrentSlide();
+            }
         };
         JsTutorialController.prototype.onNext = function () {
             var self = this;
+            if (self.currentSlide < self.numSlides - 1) {
+                self.currentSlide++;
+                self.diplayCurrentSlide();
+            }
         };
         JsTutorialController.prototype.onSandbox = function (sandboxOn) {
             var self = this;

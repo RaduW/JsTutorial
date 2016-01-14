@@ -109,8 +109,23 @@ var JsTutorial;
                 doc.markText({ line: 0, ch: 0 }, { line: lineEnd + 1, ch: 0 }, { readOnly: true });
             }
         };
-        JsConsolePanelController.prototype.setContent = function (jsContentt) {
+        JsConsolePanelController.prototype.setContent = function (jsContent) {
             var self = this;
+            if (self.editor) {
+                var doc = self.editor.getDoc();
+                self.clearEditableContent();
+                var numLines = doc.lineCount();
+                doc.replaceRange(jsContent, { line: numLines, ch: 0 }, { line: numLines, ch: 0 });
+            }
+        };
+        JsConsolePanelController.prototype.clearEditableContent = function () {
+            var self = this;
+            if (self.editor) {
+                var doc = self.editor.getDoc();
+                var startEditable = self.getLastReadonlyPosition();
+                var numLines = doc.lineCount();
+                doc.replaceRange('', startEditable, { line: numLines, ch: 0 });
+            }
         };
         JsConsolePanelController.prototype.clear = function () {
             var self = this;

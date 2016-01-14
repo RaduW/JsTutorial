@@ -8,10 +8,10 @@ namespace JsTutorial {
         editorOptions: CodeMirror.EditorConfiguration;
         
         //clears the console content (both editable and readonly)
-        clear();
+        clear():void;
         
         // sets the editable content of the console
-        setContent( jsContent: string);        
+        setContent( jsContent: string):void;        
         
         // gets the editable content of the console
         getContent( ): string;        
@@ -75,9 +75,9 @@ namespace JsTutorial {
         
         public executeContent():void{
             var self = this;
-            var retVal;
+            var retVal:any;
             if (self.editor) {
-                let message = null;
+                let message:any = null;
                 var content = self.getContent();
                 if (content) {
                     try {
@@ -102,7 +102,6 @@ namespace JsTutorial {
                 }
             }
         }
-        
         
         private getLastReadonlyPosition(){
             var self = this;
@@ -155,8 +154,24 @@ namespace JsTutorial {
 
         }
         
-        public setContent(jsContentt:string):void{
+        public setContent(jsContent:string):void{
             var self = this;
+            if ( self.editor){
+                let doc = self.editor.getDoc();
+                self.clearEditableContent();
+                let numLines = doc.lineCount();
+                doc.replaceRange(jsContent,{line:numLines,ch:0},{line:numLines,ch:0});
+            }
+        }
+        
+        public clearEditableContent():void{
+            var self = this;
+            if ( self.editor){
+                let doc = self.editor.getDoc();
+                let startEditable = self.getLastReadonlyPosition();
+                let numLines = doc.lineCount();
+                doc.replaceRange('', startEditable,{line:numLines, ch:0})
+            }
         }
         
         public clear():void{

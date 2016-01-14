@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "sourceMap": true,
-        "outDir": "../js",
-        "target": "es5",
-        "module": "amd"
-    }
-}

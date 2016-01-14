@@ -12,34 +12,12 @@ namespace JsTutorial {
         documentContent: string;
         
 
-        static $inject=[];
+        static $inject:string[]=[];
 
         constructor(){
             var self = this;
             self.api = self;  //expose the API
-            self.documentContent = `# This is a header 
-
-this is some text
-## This is a h2
-
-* a point
-* and another one
-   * inside
-
-\`\`\`js
-    /*
-        some comment here
-    */
-    function f(){
-        //a line comment
-        this.a= 33;
-        var x = "abc";
-        return 145;
-    }
-\`\`\`
-Some text goes here
-
-`;
+            self.documentContent = "";
         }
 
         public setContent(documentContent:string):void{

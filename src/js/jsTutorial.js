@@ -33,7 +33,7 @@ var JsTutorial;
                 callback: function (event, hotkey) { self.onClear(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
-            self.scriptLoader.loadScript('js/course.js').then(function (response) {
+            self.scriptLoader.loadScript('course.js').then(function (response) {
                 if (response) {
                     self.slides = response;
                     self.numSlides = response.length;

@@ -19,7 +19,7 @@ namespace JsConsole {
             var self = this;
             var retVal:ScriptChunk[] = [];
 
-            return self.$http.get(`/${scriptName}`)
+            return self.$http.get(`/slides/${scriptName}`)
                 .then(
                     // success return the content of data (it should be a string)
                     (response: { data:string}) => {

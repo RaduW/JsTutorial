@@ -53,7 +53,7 @@ namespace JsTutorial {
 
             });
             
-            self.scriptLoader.loadScript('js/course.js').then((response: JsConsole.ScriptChunk[]) => {
+            self.scriptLoader.loadScript('course.js').then((response: JsConsole.ScriptChunk[]) => {
                 if ( response){
                     self.slides = response;
                     self.numSlides = response.length;

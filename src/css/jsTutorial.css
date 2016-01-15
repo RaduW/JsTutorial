@@ -39,6 +39,14 @@ pre code {
   background-color: transparent;
   border-radius: 0;
 }
+.markdown-panel h1,
+.markdown-panel h2,
+.markdown-panel h3,
+.markdown-panel h4,
+.markdown-panel h5,
+.markdown-panel h6 {
+  text-align: center;
+}
 .markdown-panel,
 .console-panel,
 .CodeMirror {

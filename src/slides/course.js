@@ -17,6 +17,67 @@
 */
 
 /*--
+
+* functions
+
+*/
+
+/*--
+## dynamic versus static (lexical) scope
+
+```js
+var x = 10;
+ 
+function foo() {
+  return x;
+}
+ 
+function higher(funArg) {
+  var x = 20;
+  funArg();
+};
+
+higher(foo);
+
+```
+*/
+
+/*--
+## scope sharing *or not*
+
+```js
+var data = [];
+ 
+for (var k = 0; k < 3; k++) {
+  data[k] = function () {
+    return k;
+  };
+}
+ 
+[data[0](),data[1](),data[2]()];
+```
+*/
+
+/*--+
+### we just need another scope
+
+```js
+var data = [];
+ 
+for (var k = 0; k < 3; k++) {
+    (function(k){
+        data[k] = function () {
+            return k;
+    })(k);
+}
+ 
+[data[0](),data[1](),data[2]()];
+```
+*/
+
+
+
+/*--
 ##  Objects
 
 ### Creation    

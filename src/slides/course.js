@@ -178,16 +178,16 @@ myFuncExperession(); // OK the myFuncExpression variable has been initialized
 */
 
 
-/*--+
+/*--
     
 ## 2.3 Functions are first-class language constructs. 
 
 ### Functions can be manipulated as normal data:
 
-* be created at runtime
-* be stored in variables
-* be passed as parameters to functions
-* be returned from functions
+* can be created at runtime
+* can be stored in variables
+* can be passed as parameters to functions
+* can be returned from functions
 
 ```js
 var f = function(){return 1;}
@@ -222,12 +222,14 @@ var h = function()
 /*--
 ## Theory ( scope, environment, closure)
 
-### free variable
-> A variable used in a function that is neither a function parameter nor a local variable
-### bound variable
-> either a local variable or a parameter 
+#### free variable
+* A variable used in a function that is neither a function parameter nor a local variable
+#### bound variable
+* either a local variable or a parameter 
+*/
 
-* dynamic versus static (lexical) scope
+/*
+## dynamic versus static (lexical) scope
 
 ```js
 var x = 10;
@@ -238,13 +240,143 @@ function foo() {
  
 function higher(funArg) {
   var x = 20;
-  funArg();
+  return funArg();
 };
 
 higher(foo);
 
 ```
 */
+
+/*--+
+
+Javascript (like most modern languages) uses static (lexical) scoping.
+
+Free variable are resolved based **exclusively** based on where they are defined.
+
+Unlike dynamic scoping one can tell precisely to what is a symbol bound just
+by looking at the source where the variable is used (it doesn't depend on where
+the function is called).
+
+*/
+
+var x = 10;
+ 
+function foo() {
+  return x;
+}
+ 
+function higher(funArg) {
+  var x = 20;
+  return funArg();
+};
+
+higher(foo);
+
+/*--+
+
+### static scoping + first-class functions 
+
+* we need a mechanism to hold onto the free variables of a function
+
+```js
+function outer( x){
+    return function inner(y){
+        return x+y;
+    }
+}
+
+var f = outer(1);
+f(2);
+```
+*/
+function outer( x){
+    return function inner(y){
+        return x+y;
+    }
+}
+
+var f = outer(1);
+f(2);
+
+/*--
+
+## Closure (definition)
+
+Wikipedia
+
+>In programming languages, closures (also lexical closures or function closures) are a technique for implementing lexically scoped name binding in languages
+>with first-class functions. Operationally, a closure is a record storing a function together with an environment: a mapping associating 
+>each free variable of the function (variables that are used locally, but defined in an enclosing scope) with the value or storage location to 
+>which the name was bound when the closure was created. A closure—unlike a plain function—allows the function to access those captured variables through 
+>the closure's reference to them, even when the function is invoked outside their scope.
+*/
+function outer( x){
+    return function inner(y){
+        return x+y;
+    }
+}
+
+var f = outer(1);
+f(2);
+
+/*--+
+
+* closures appear wierd because we automatically think about stacks when we talk about function calls
+* closures are **NOT** implemented using the stack model.
+* javascript (JS 5) uses the concept of **Lexical Environment**
+
+>A lexical environment defines the association of identifiers to the values of variables and functions based upon the lexical nesting structures of ECMAScript code.
+
+*/
+
+/*--
+
+### An example
+
+```js
+// Global environment (GE)
+var x = 10;
+ 
+function foo(y) {
+  // environment of "foo" function (E1)
+  var z = 30;
+ 
+  function bar(q) {
+    // environment of "bar" function (E2)
+    return x + y + z + q;
+  }
+ 
+  // return "bar" to the outside
+  return bar;
+}
+ 
+var bar = foo(20);
+bar(40); // 100
+```
+
+![environment](/slides/environment.png)
+*/
+
+// Global environment (GE)
+var x = 10;
+ 
+function foo(y) {
+  // environment of "foo" function (E1)
+  var z = 30;
+ 
+  function bar(q) {
+    // environment of "bar" function (E2)
+    return x + y + z + q;
+  }
+ 
+  // return "bar" to the outside
+  return bar;
+}
+ 
+var bar = foo(20);
+bar(40); // 100
+
 
 /*--
 ## scope sharing *or not*
@@ -279,44 +411,6 @@ for (var k = 0; k < 3; k++) {
 ```
 */
 
-
-/*--
-
-## Closure (definition)
-
-Wikipedia
-
->In programming languages, closures (also lexical closures or function closures) are a technique for implementing lexically scoped name binding in languages
->with first-class functions. Operationally, a closure is a record storing a function together with an environment: a mapping associating 
->each free variable of the function (variables that are used locally, but defined in an enclosing scope) with the value or storage location to 
->which the name was bound when the closure was created. A closure—unlike a plain function—allows the function to access those captured variables through 
->the closure's reference to them, even when the function is invoked outside their scope.
-*/
-
-/*--
-```js
-// Global environment (GE)
-var x = 10;
- 
-function foo(y) {
-  // environment of "foo" function (E1)
-  var z = 30;
- 
-  function bar(q) {
-    // environment of "bar" function (E2)
-    return x + y + z + q;
-  }
- 
-  // return "bar" to the outside
-  return bar;
-}
- 
-var bar = foo(20);
-bar(40); // 100
-```
-
-![environment](/slides/environment.png)
-*/
 
 /*--
 ## Object Oriented JS
@@ -355,16 +449,3 @@ var y = Object.create(x);
 f.prototype.isPrototypeOf(x),
 x.isPrototypeOf(y)];
 
-/*--+
-
-1. used to implement pretty much everything including:
-    1. objects
-        1. objects
-        2. classes 
-        3. namespaces
-    2. functions
-        1. functions
-        2. object members
-        3. constructors
-        4. closures
-*/

@@ -228,7 +228,7 @@ var h = function()
 * either a local variable or a parameter 
 */
 
-/*
+/*--
 ## dynamic versus static (lexical) scope
 
 ```js
@@ -273,9 +273,9 @@ function higher(funArg) {
 
 higher(foo);
 
-/*--+
+/*--
 
-### static scoping + first-class functions 
+## static scoping + first-class functions 
 
 * we need a mechanism to hold onto the free variables of a function
 
@@ -377,9 +377,21 @@ function foo(y) {
 var bar = foo(20);
 bar(40); // 100
 
+/*--
+## JavaScript Functions
+
+* objects that can be executed i.e. support operator ()
+* are dictionaries like any other object
+* receive a hidden object on creation containing the free variables (the environmet)
+    * the environment of a function persists as long as the function persists
+    * the environment of a function can be accessed/modified from the function and from all inner functions
+*/
+
 
 /*--
 ## scope sharing *or not*
+
+* What does this return ?
 
 ```js
 var data = [];
@@ -393,9 +405,23 @@ for (var k = 0; k < 3; k++) {
 [data[0](),data[1](),data[2]()];
 ```
 */
+var data = [];
+ 
+for (var k = 0; k < 3; k++) {
+  data[k] = function () {
+    return k;
+  };
+}
+ 
+[data[0](),data[1](),data[2]()];
 
 /*--+
-### we just need another scope
+* How can we fix it ? 
+*/
+
+
+/*--+
+### ... we just need to place k in separate environments for each iteration
 
 ```js
 var data = [];
@@ -404,12 +430,26 @@ for (var k = 0; k < 3; k++) {
     (function(k){
         data[k] = function () {
             return k;
+        }
     })(k);
 }
  
 [data[0](),data[1](),data[2]()];
+
 ```
 */
+var data = [];
+ 
+for (var k = 0; k < 3; k++) {
+    (function(k){
+        data[k] = function () {
+            return k;
+        }
+    })(k);
+}
+ 
+[data[0](),data[1](),data[2]()];
+
 
 
 /*--

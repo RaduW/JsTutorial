@@ -47,6 +47,11 @@ pre code {
 .markdown-panel h6 {
   text-align: center;
 }
+.markdown-panel img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .markdown-panel,
 .console-panel,
 .CodeMirror {

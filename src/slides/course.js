@@ -388,9 +388,9 @@ bar(40); // 100
     * the environment of a function can be accessed/modified from the function and from all inner functions
 
 ```js
-var a = 1;
+var a = 0;
 function outer(){
-    var b = 1;
+    var b = 0;
     function middle(){
         function inner(){
             b++;
@@ -409,9 +409,9 @@ var i4 =m2();
 [i1(),i2(),i3(),i4()];
 ```
 */
-var a = 1;
+var a = 0;
 function outer(){
-    var b = 1;
+    var b = 0;
     function middle(){
         function inner(){
             b++;
@@ -435,15 +435,15 @@ var i4 =m2();
 
 ```js
 outer = { call : function outer(){...}
-    environment: { a: 1 }
+    environment: { a: 0 }
     parentEnv: null
 }
 m1 = { call : function middle(){...}
-    environment: { b:1}
+    environment: { b:0}
     parentEnv: outer.environment
 }
 m2 = { call : function middle(){...}
-    environment: { b:1 }
+    environment: { b:0 }
     parentEnv: outer.environment
 }
 i1 = { call : function inner(){...}
@@ -467,9 +467,9 @@ i4 = { call : function inner(){...}
 
 /*--
 ```js
-var a = 1;
+var a = 0;
 function outer(){
-    var b = 1;
+    var b = 0;
     function middle(){
         function inner(){
             b++;
@@ -479,14 +479,14 @@ function outer(){
     }
     return middle;
 }
-var m1 =outer(), m2 =outer()
-    i1 =m1(), i2 =m1(), i3 =m2(), i4 =m2();
+var m1=outer(), m2=outer()
+    i1=m1(), i2=m1(), i3=m2(), i4=m2();
 [i1(),i2(),i3(),i4()];
 
 //Pseudocode
-outer = { environment: { a: 1 }, parentEnv: null}
-m1 = { environment: { b:1}, parentEnv: outer.environment}
-m2 = { environment: { b:1 }, parentEnv: outer.environment}
+outer = { environment: { a:0 }, parentEnv: null}
+m1 = { environment: { b:0 }, parentEnv: outer.environment}
+m2 = { environment: { b:0 }, parentEnv: outer.environment}
 i1 = { environment: {}, parentEnv: m1.environment}
 i2 = { environment: {}, parentEnv: m1.environment}
 i3 = { environment: {}, parentEnv: m2.environment}
@@ -528,21 +528,34 @@ for (var k = 0; k < 3; k++) {
 
 
 /*--+
-### ... we just need to place k in separate environments for each iteration
+### ... each function needs a private k in a separate environment
 
 ```js
 var data = [];
- 
+
+for (var k = 0; k < 3; k++) {
+    function middle(){
+        var x = k;
+        return function () {
+            return x;
+        }
+    }
+    data[k] = middle();
+}
+
+[data[0](),data[1](),data[2]()];
+
+// or shorter...
+
 for (var k = 0; k < 3; k++) {
     (function(k){
         data[k] = function () {
             return k;
         }
     })(k);
-}
- 
+} 
+  
 [data[0](),data[1](),data[2]()];
-
 ```
 */
 var data = [];

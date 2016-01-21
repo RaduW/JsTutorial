@@ -42,9 +42,7 @@ pre code {
 .markdown-panel h1,
 .markdown-panel h2,
 .markdown-panel h3,
-.markdown-panel h4,
-.markdown-panel h5,
-.markdown-panel h6 {
+.markdown-panel h4 {
   text-align: center;
 }
 .markdown-panel img {

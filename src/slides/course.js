@@ -303,7 +303,7 @@ f(2);
 
 ## Closure (definition)
 
-Wikipedia
+##### Wikipedia
 
 >In programming languages, closures (also lexical closures or function closures) are a technique for implementing lexically scoped name binding in languages
 >with first-class functions. Operationally, a closure is a record storing a function together with an environment: a mapping associating 
@@ -324,7 +324,8 @@ f(2);
 
 * closures appear wierd because we automatically think about stacks when we talk about function calls
 * closures are **NOT** implemented using the stack model.
-* javascript (JS 5) uses the concept of **Lexical Environment**
+
+##### Javascript (JS 5) uses the concept of **Lexical Environment**
 
 >A lexical environment defines the association of identifiers to the values of variables and functions based upon the lexical nesting structures of ECMAScript code.
 
@@ -380,13 +381,119 @@ bar(40); // 100
 /*--
 ## JavaScript Functions
 
-* objects that can be executed i.e. support operator ()
+* objects that can be executed i.e. support `operator()`
 * are dictionaries like any other object
 * receive a hidden object on creation containing the free variables (the environmet)
     * the environment of a function persists as long as the function persists
     * the environment of a function can be accessed/modified from the function and from all inner functions
+
+```js
+var a = 1;
+function outer(){
+    var b = 1;
+    function middle(){
+        function inner(){
+            b++;
+            return a+b;
+        }
+        return inner
+    }
+    return middle;
+}
+var m1 =outer();
+var m2 =outer();
+var i1 =m1();
+var i2 =m1();
+var i3 =m2();
+var i4 =m2();
+[i1(),i2(),i3(),i4()];
+```
+*/
+var a = 1;
+function outer(){
+    var b = 1;
+    function middle(){
+        function inner(){
+            b++;
+            return a+b;
+        }
+        return inner
+    }
+    return middle;
+}
+var m1 =outer();
+var m2 =outer();
+var i1 =m1();
+var i2 =m1();
+var i3 =m2();
+var i4 =m2();
+[i1(),i2(),i3(),i4()];
+
+/*--+
+
+##### Pseudocode
+
+```js
+outer = { call : function outer(){...}
+    environment: { a: 1 }
+    parentEnv: null
+}
+m1 = { call : function middle(){...}
+    environment: { b:1}
+    parentEnv: outer.environment
+}
+m2 = { call : function middle(){...}
+    environment: { b:1 }
+    parentEnv: outer.environment
+}
+i1 = { call : function inner(){...}
+    environment: {}
+    parentEnv: m1.environment
+}
+i2 = { call : function inner(){...}
+    environment: {}
+    parentEnv: m1.environment
+}
+i3 = { call : function inner(){...}
+    environment: {}
+    parentEnv: m2.environment
+}
+i4 = { call : function inner(){...}
+    environment: {}
+    parentEnv: m2.environment
+}
+```
 */
 
+/*--
+```js
+var a = 1;
+function outer(){
+    var b = 1;
+    function middle(){
+        function inner(){
+            b++;
+            return a+b;
+        }
+        return inner
+    }
+    return middle;
+}
+var m1 =outer(), m2 =outer()
+    i1 =m1(), i2 =m1(), i3 =m2(), i4 =m2();
+[i1(),i2(),i3(),i4()];
+
+//Pseudocode
+outer = { environment: { a: 1 }, parentEnv: null}
+m1 = { environment: { b:1}, parentEnv: outer.environment}
+m2 = { environment: { b:1 }, parentEnv: outer.environment}
+i1 = { environment: {}, parentEnv: m1.environment}
+i2 = { environment: {}, parentEnv: m1.environment}
+i3 = { environment: {}, parentEnv: m2.environment}
+i4 = { environment: {}, parentEnv: m2.environment}
+
+```
+*/
 
 /*--
 ## scope sharing *or not*

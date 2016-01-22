@@ -10,6 +10,7 @@ namespace JsTutorial {
 
         public markdownPanel:IMarkdownPanel; //set from template
         public jsConsolePanel : IJsConsolePanel; //set from the template
+        public outputPanel: IOutputPanel; // set from the template
         public sandboxOn: boolean;
         private numSlides: number;
         private currentSlide: number;
@@ -136,5 +137,5 @@ namespace JsTutorial {
         }
     }
 
-    angular.module("jsConsole").directive('rwJsTutorial', JsTutorialDirective.instance);
+    angular.module("jsTutorial").directive('rwJsTutorial', JsTutorialDirective.instance);
 }

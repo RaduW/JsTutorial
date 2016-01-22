@@ -46,7 +46,14 @@
                 <rw-markdown-panel api='jt.markdownPanel'/>
             </div>
             <div ui-layout-container>
-                <rw-js-console-panel  api='jt.jsConsolePanel' />
+                <div ui-layout="{flow : 'row'}">
+                    <div ui-layout-container size="80%">
+                        <rw-js-console-panel  api='jt.jsConsolePanel' />
+                    </div>
+                    <div ui-layout-container collapsed="true" >
+                        <rw-output-panel  api='jt.outputPanel' />
+                    </div>
+                </div>
             </div>
         </div>
     </md-content>

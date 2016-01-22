@@ -64,6 +64,9 @@ pre code {
 .console-panel .readOnlyText {
   color: #aaa;
 }
+.output-panel {
+  background: white;
+}
 .cm-s-default .cm-header {
   color: blue;
 }

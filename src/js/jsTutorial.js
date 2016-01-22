@@ -107,5 +107,5 @@ var JsTutorial;
         };
         return JsTutorialDirective;
     })();
-    angular.module("jsConsole").directive('rwJsTutorial', JsTutorialDirective.instance);
+    angular.module("jsTutorial").directive('rwJsTutorial', JsTutorialDirective.instance);
 })(JsTutorial || (JsTutorial = {}));

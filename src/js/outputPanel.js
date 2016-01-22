@@ -45,8 +45,8 @@ var JsTutorial;
                 else if (val === null)
                     stringVal = 'null';
                 else
-                    stringVal = JSON.stringify(val);
-                stringVal += '\n' + stringVal;
+                    stringVal = JSON.stringify(val, null, '\t');
+                result += '\n' + stringVal;
             }
             self.addContent(result);
         };
@@ -55,8 +55,8 @@ var JsTutorial;
             if (self.editor) {
                 var doc = self.editor.getDoc();
                 var lineStart = doc.lineCount();
-                outputContent = "\n" + outputContent;
-                doc.replaceRange(outputContent, { line: lineStart, ch: 0 }, { line: lineStart, ch: 0 });
+                outputContent = outputContent + "\n";
+                doc.replaceRange(outputContent, { line: 0, ch: 0 }, { line: 0, ch: 0 });
             }
         };
         OutputPanelController.prototype.clear = function () {

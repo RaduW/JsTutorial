@@ -61,9 +61,9 @@ namespace JsTutorial {
                 else if ( val === null)
                     stringVal = 'null';
                 else
-                    stringVal = JSON.stringify(val);
+                    stringVal = JSON.stringify(val,null, '\t');
                 
-                stringVal += '\n'+stringVal;
+                result += stringVal+'\n';
             }
             self.addContent(result);
         }
@@ -73,8 +73,8 @@ namespace JsTutorial {
             if ( self.editor){
                 let doc = self.editor.getDoc();
                 let lineStart = doc.lineCount();
-                outputContent = `\n${outputContent}`;
-                doc.replaceRange(outputContent,{line:lineStart,ch:0},{line:lineStart,ch:0});
+                outputContent = `${outputContent}\n`;
+                doc.replaceRange(outputContent,{line:0,ch:0},{line:0,ch:0});
             }
         }
         

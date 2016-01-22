@@ -46,7 +46,7 @@ var JsTutorial;
                     stringVal = 'null';
                 else
                     stringVal = JSON.stringify(val, null, '\t');
-                result += '\n' + stringVal;
+                result += stringVal + '\n';
             }
             self.addContent(result);
         };

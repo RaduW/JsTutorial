@@ -576,6 +576,35 @@ for (var k = 0; k < 3; k++) {
 ## Object Oriented JS
 */
 
+/*--+
+### Types revisited
+
+* `typeof()` --> very course clasification of objects
+* `instanceOf()` --> closer (somewhat) to the idea of type from C# or other statically typed languages
+
+#### What are types used for in statically typed languages ?
+
+*/
+
+/*--+
+
+1. (**Interface usage**) To infer if a particular function can be used with a particular object ('match' functions with 'compatible' data).
+2. (**Type derivation usage**) Code reuse (used to be a big deal in the 199x , not so much anymore).
+
+*/
+
+/*--+
+
+#### Types in Javascript
+
+* In Js we do NOT need any types in order to "match" functions with the data they can operate on (although sometimes it would be nice)
+* All Js functions are generic (a lot more generic than generic C# functions, as generic as C++ templates)
+* Types in javascript are mainly used for code reuse 
+* The type mechanisms (prototypes) are also used for efficiency (to make objects less hevy)
+
+*/
+
+
 /*--
 ## Prototype
 
@@ -609,3 +638,31 @@ var y = Object.create(x);
 f.prototype.isPrototypeOf(x),
 x.isPrototypeOf(y)];
 
+/*--
+
+### reading/writing from prototypes
+
+* reading (rValues) use the prototype hierachy
+* writing (lValues) do **NOT** use the prototype hierachy
+
+```js
+function F(){}
+F.prototype.a = 1;
+
+var x = new F();
+var y = x.a;
+x.a = 2;
+[y,x.a,F.prototype.a];
+delete x.a;
+x.a;
+```
+
+*/
+
+function F(){}
+F.prototype.a = 1;
+
+var x = new F();
+var y = x.a;
+x.a = 2;
+[y,x.a,F.prototype.a];

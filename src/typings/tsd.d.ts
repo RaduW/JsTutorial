@@ -5,3 +5,4 @@
 /// <reference path="lodash/lodash.d.ts" />
 /// <reference path="highlightjs/highlightjs.d.ts" />
 /// <reference path="angular-hotkeys/angular-hotkeys.d.ts" />
+/// <reference path="angular-ui-router/angular-ui-router.d.ts" />

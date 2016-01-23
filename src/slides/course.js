@@ -356,7 +356,7 @@ var bar = foo(20);
 bar(40); // 100
 ```
 
-![environment](/slides/environment.png)
+![environment](slides/environment.png)
 */
 
 // Global environment (GE)

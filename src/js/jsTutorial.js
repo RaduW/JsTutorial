@@ -3,8 +3,10 @@
 var JsTutorial;
 (function (JsTutorial) {
     var JsTutorialController = (function () {
-        function JsTutorialController(hotkeys, scriptLoader) {
+        function JsTutorialController(hotkeys, scriptLoader, $state, $stateParams) {
             this.scriptLoader = scriptLoader;
+            this.$state = $state;
+            this.$stateParams = $stateParams;
             var self = this;
             self.sandboxOn = true;
             self.currentSlide = 0;
@@ -37,16 +39,41 @@ var JsTutorial;
                 if (response) {
                     self.slides = response;
                     self.numSlides = response.length;
-                    self.currentSlide = 0;
-                    self.diplayCurrentSlide();
+                    var slideId = $stateParams['slideId'];
+                    self.tryGoToSlide("" + slideId);
                 }
             });
         }
+        JsTutorialController.prototype.tryGoToSlide = function (slideId) {
+            var self = this;
+            var requiredSlide = parseInt(slideId);
+            if (isNaN(requiredSlide))
+                requiredSlide = 1;
+            self.goToPage(requiredSlide - 1);
+        };
+        JsTutorialController.prototype.goToPage = function (page) {
+            var self = this;
+            if (self.numSlides == 0)
+                return; //we are proably at startup (we can't navigate)
+            if (isNaN(page))
+                page = 0;
+            if (page < 0)
+                page = 0;
+            if (page >= self.numSlides)
+                page = self.numSlides - 1;
+            if (page == self.currentSlide)
+                return;
+            self.currentSlide = page;
+            self.diplayCurrentSlide();
+            self.$state.go('main.page', { slideId: self.currentSlide + 1 });
+        };
         JsTutorialController.prototype.diplayCurrentSlide = function () {
             var self = this;
             if (self.currentSlide < self.numSlides) {
-                self.markdownPanel.setContent(self.slides[self.currentSlide].doc);
-                self.jsConsolePanel.setContent(self.slides[self.currentSlide].script);
+                if (self.markdownPanel)
+                    self.markdownPanel.setContent(self.slides[self.currentSlide].doc);
+                if (self.jsConsolePanel)
+                    self.jsConsolePanel.setContent(self.slides[self.currentSlide].script);
             }
         };
         JsTutorialController.prototype.onMenu = function () {
@@ -56,17 +83,11 @@ var JsTutorial;
         };
         JsTutorialController.prototype.onPrevious = function () {
             var self = this;
-            if (self.currentSlide > 0) {
-                self.currentSlide--;
-                self.diplayCurrentSlide();
-            }
+            self.goToPage(self.currentSlide - 1);
         };
         JsTutorialController.prototype.onNext = function () {
             var self = this;
-            if (self.currentSlide < self.numSlides - 1) {
-                self.currentSlide++;
-                self.diplayCurrentSlide();
-            }
+            self.goToPage(self.currentSlide + 1);
         };
         JsTutorialController.prototype.onSandbox = function (sandboxOn) {
             var self = this;
@@ -84,7 +105,7 @@ var JsTutorial;
             if (self.jsConsolePanel)
                 self.jsConsolePanel.executeContent();
         };
-        JsTutorialController.$import = ['hotkeys', 'scriptLoader'];
+        JsTutorialController.$import = ['hotkeys', 'scriptLoader', '$state', '$stateParams'];
         return JsTutorialController;
     })();
     var JsTutorialDirective = (function () {

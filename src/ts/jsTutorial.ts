@@ -4,6 +4,7 @@
 namespace JsTutorial {
 
     export interface IJsTutorialController{
+        tryGoToSlide(slideId:string):void;
     }
 
     class JsTutorialController implements IJsTutorialController  {
@@ -17,8 +18,11 @@ namespace JsTutorial {
         private slides: JsConsole.ScriptChunk[];
         
         
-        static $import = ['hotkeys','scriptLoader'];
-        constructor( hotkeys: ng.hotkeys.HotkeysProvider,private scriptLoader:JsConsole.IScriptLoader) {
+        static $import = ['hotkeys','scriptLoader','$state','$stateParams'];
+        constructor( hotkeys: ng.hotkeys.HotkeysProvider,
+                private scriptLoader:JsConsole.IScriptLoader, 
+                private $state: ng.ui.IStateService,
+                private $stateParams:ng.ui.IStateParamsService) {
             var self = this;
             self.sandboxOn = true;
             
@@ -58,19 +62,49 @@ namespace JsTutorial {
                 if ( response){
                     self.slides = response;
                     self.numSlides = response.length;
-                    self.currentSlide = 0;
-                    self.diplayCurrentSlide();
+                    let slideId = $stateParams['slideId'];
+                    self.tryGoToSlide(`${slideId}`);
                 }
             });
 
+        }
+        
+        tryGoToSlide(slideId:string){
+            var self = this;
+            let requiredSlide = parseInt(slideId)
+            if ( isNaN(requiredSlide))
+                requiredSlide = 1;
+            self.goToPage(requiredSlide-1); 
+        }
+
+        goToPage( page:number):void{
+            var self = this;
+            
+            if( self.numSlides == 0)
+                return ; //we are proably at startup (we can't navigate)
+            
+            if ( isNaN(page))
+                page = 0;
+            if (page < 0)
+                page = 0;
+            if (page >= self.numSlides)
+                page = self.numSlides -1;
+                
+            if ( page == self.currentSlide)
+                return;
+            self.currentSlide = page;
+            self.diplayCurrentSlide();
+            self.$state.go('main.page', {slideId:self.currentSlide+1});
         }
         
         diplayCurrentSlide(){
             var self = this;
             if ( self.currentSlide < self.numSlides)
             {
-                self.markdownPanel.setContent(self.slides[self.currentSlide].doc);
-                self.jsConsolePanel.setContent(self.slides[self.currentSlide].script);
+                if ( self.markdownPanel)
+                    self.markdownPanel.setContent(self.slides[self.currentSlide].doc);
+                if ( self.jsConsolePanel)
+                    self.jsConsolePanel.setContent(self.slides[self.currentSlide].script);
             }
         }
        
@@ -82,17 +116,11 @@ namespace JsTutorial {
         
         onPrevious():void {
             var self = this;
-            if ( self.currentSlide > 0){
-                self.currentSlide--;
-                self.diplayCurrentSlide();
-            }
+            self.goToPage(self.currentSlide -1);
         }
         onNext():void{
             var self = this;
-            if ( self.currentSlide < self.numSlides-1){
-                self.currentSlide++;
-                self.diplayCurrentSlide();
-            }
+            self.goToPage(self.currentSlide +1);
         }
         
         onSandbox(sandboxOn:boolean){

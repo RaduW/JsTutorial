@@ -6,28 +6,28 @@
   "bundle": "src/typings/tsd.d.ts",
   "installed": {
     "codemirror/codemirror.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "angularjs/angular.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "jquery/jquery.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "angular-material/angular-material.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "lodash/lodash.d.ts": {
-      "commit": "421d6610bdb09e1015b71f5991d7a68d079eca21"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "highlightjs/highlightjs.d.ts": {
-      "commit": "ba257a9b91bc0de1bdd9091b6723194c905a902a"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "angular-hotkeys/angular-hotkeys.d.ts": {
-      "commit": "1984ea435fe9e93a012d50db7773db58ae5d494b"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     },
     "angular-ui-router/angular-ui-router.d.ts": {
-      "commit": "a9680ac2efd3add0d38cd0331f30ad497d9dd1e0"
+      "commit": "0bc09e91dd6f2d34b14af4367a138d34f437a5d4"
     }
   }
 }

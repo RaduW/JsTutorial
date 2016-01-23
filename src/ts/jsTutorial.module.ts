@@ -20,9 +20,15 @@ angular.module('jsTutorial',['jsConsole','ui.layout', 'hc.marked', 'ngMaterial',
   //redirect to state slide 1 for anything unknown
   $urlRouterProvider.otherwise("/1");
   
-  $stateProvider.state( 'main',{
-        url:"/:slideNumber",
+  $stateProvider.
+    state( 'main',{
+        url:"/",
         template: "<rw-js-tutorial/>"
-  });
+    }).
+    state('main.page',{
+        url:":slideId",
+        template: "<span/>",
+        controller: JsTutorial.PageChanger
+    });
   
 }]);;

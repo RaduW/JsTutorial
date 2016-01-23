@@ -12,7 +12,7 @@ var JsConsole;
         ScriptLoader.prototype.loadScript = function (scriptName) {
             var self = this;
             var retVal = [];
-            return self.$http.get("/slides/" + scriptName)
+            return self.$http.get("slides/" + scriptName)
                 .then(
             // success return the content of data (it should be a string)
             function (response) {

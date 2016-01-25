@@ -35,6 +35,12 @@ var JsTutorial;
                 callback: function (event, hotkey) { self.onClear(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
+            hotkeys.add({
+                combo: "shift+alt+del",
+                description: "clear output panel",
+                callback: function (event, hotkey) { self.onClearOutput(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
             self.scriptLoader.loadScript('course.js').then(function (response) {
                 if (response) {
                     self.slides = response;
@@ -99,6 +105,11 @@ var JsTutorial;
             var self = this;
             if (self.jsConsolePanel)
                 self.jsConsolePanel.clear();
+        };
+        JsTutorialController.prototype.onClearOutput = function () {
+            var self = this;
+            if (self.outputPanel)
+                self.outputPanel.clear();
         };
         JsTutorialController.prototype.onRun = function () {
             var self = this;

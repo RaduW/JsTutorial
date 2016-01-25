@@ -34,28 +34,30 @@ namespace JsTutorial {
                 description: "Execute javascript",
                 callback: (event, hotkey) => { self.onRun()},
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
-
             });
             hotkeys.add({
                 combo: "alt+p",
                 description: "Previous slide",
                 callback: (event, hotkey) => { self.onPrevious()},
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
-
             });
             hotkeys.add({
                 combo: "alt+n",
                 description: "Next slide",
                 callback: (event, hotkey) => { self.onNext()},
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
-
             });
             hotkeys.add({
                 combo: "alt+del",
                 description: "clear javascript panel",
                 callback: (event, hotkey) => { self.onClear()},
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
-
+            });
+            hotkeys.add({
+                combo: "shift+alt+del",
+                description: "clear output panel",
+                callback: (event, hotkey) => { self.onClearOutput()},
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
             
             self.scriptLoader.loadScript('course.js').then((response: JsConsole.ScriptChunk[]) => {
@@ -134,6 +136,11 @@ namespace JsTutorial {
             var self = this;
             if ( self.jsConsolePanel)
                 self.jsConsolePanel.clear();
+        }
+        onClearOutput():void{
+            var self = this;
+            if ( self.outputPanel)
+                self.outputPanel.clear();
         }
         onRun():void{
             var self = this;

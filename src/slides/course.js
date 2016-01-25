@@ -600,7 +600,7 @@ for (var k = 0; k < 3; k++) {
 * In Js we do NOT need any types in order to "match" functions with the data they can operate on (although sometimes it would be nice)
 * All Js functions are generic (a lot more generic than generic C# functions, as generic as C++ templates)
 * Types in javascript are mainly used for code reuse 
-* The type mechanisms (prototypes) are also used for efficiency (to make objects less hevy)
+* The type mechanisms (prototypes) are also used for efficiency (to make objects lighter)
 
 */
 
@@ -608,17 +608,179 @@ for (var k = 0; k < 3; k++) {
 /*--
 ## Prototype
 
-*/
+* All Js objects have a link to a **class object** called **Prototype**
+* The Prototype object is used to hold common (shared) members
+* The Prototype object is set at object construction
+* The Prototype object can be accessed via the object or via the constructor function
+    * Via object
+        * `Object.getPrototypeOf(x)` --> the protable standard way in EcmaScript 5
+        * `x.__proto__` --> legacy style (pre EcmaScript 5) non stadard but widely supported
+    * via constructor f.prototype
+ 
+```js
+function f(){return 1;}
+var x = new f();
 
-/*--
-
+f.prototype == Object.getPrototypeOf(x)  ; // true
+f.prototype == x.__proto__; // true
+```  
 */
 function f(){return 1;}
-f.prototype.constructor == f
 var x = new f();
-Object.getPrototypeOf(x) == f.prototype
 
-Object.getPrototypeOf(x) == x.__proto__
+[f.prototype == Object.getPrototypeOf(x) ,
+f.prototype == x.__proto__] 
+
+/*--
+### How does the prototype work ?
+
+When the interpreter tries to access a member it will check if the member is present in the object and if it is not
+it will look for it the object prototype.
+
+### typical prototype usage
+
+* used to share object methods
+
+```js
+function A(){
+    this.x = 1;
+    this.y = 2;
+}
+
+A.prototype.f = function(){
+    return this.x + this.y;
+}
+
+a = new A();
+a.f(); // 3
+
+```
+*/
+function A(){
+    this.x = 1;
+    this.y = 2;
+}
+
+A.prototype.f = function(){
+    return this.x + this.y;
+}
+
+var a = new A();
+a.f();
+
+/*--+
+
+* if the member is found in the object the prototype is not checked anymore
+
+```js
+var b = new A();
+b.f = function() { return this.x - this.y;} 
+b.f(); // -1
+
+```
+
+*/
+function A(){
+    this.x = 1;
+    this.y = 2;
+}
+
+A.prototype.f = function(){
+    return this.x + this.y;
+}
+var b = new A();
+b.f = function() { return this.x - this.y;} 
+b.f(); // -1
+/*--
+### reading/writing from prototypes
+
+* reading (rValues) uses the prototype hierachy
+* writing (lValues) does **NOT** use the prototype hierachy
+
+```js
+function F(){}
+F.prototype.a = 1;
+
+var x = new F();
+var old = x.a;
+x.a = 2;
+
+[old,x.a,F.prototype.a];
+delete x.a;
+x.a;
+```
+
+*/
+function F(){}
+F.prototype.a = 1;
+
+var x = new F();
+var old = x.a;
+out ("old x",x)
+x.a = 2;
+out ("new x", x);
+out("old=" + old +" x.a=" + x.a + " F.prototype.a=" + F.prototype.a);
+
+delete x.a;
+
+out("after deleting x.a we get x.a=" + x.a);
+
+/*--
+### Prototype Inheritance
+
+* A prototype (like any other object) may have itself a prototype (creating a prototype chain).
+* When a member lookup is performed the interpreter goes up the prototype chain.
+
+```js
+function Animal( name){
+    this.name = name;
+}
+
+Animal.prototype.sleep = function(){
+    out( "" + this.name + " is sleeping." );
+}
+
+function Dog( name){
+    this.name = name;
+}
+
+//Note: not perfect (we should patch the constructor)
+Dog.prototype = Object.create(Animal.prototype);
+//or non stadard
+//Dog.prototype.__proto__ = Animal.prototype;
+
+Dog.prototype.bark = function(){
+    out( "" + this.name + " is barking." );
+}
+
+var azor = new Dog('Azor');
+azor.sleep();
+azor.bark();
+```
+*/
+function Animal( name){
+    this.name = name;
+}
+
+Animal.prototype.sleep = function(){
+    out( "" + this.name + " is sleeping." );
+}
+
+function Dog( name){
+    this.name = name;
+}
+Dog.prototype = Object.create(Animal.prototype);
+
+Dog.prototype.bark = function(){
+    out( "" + this.name + " is barking." );
+}
+
+var azor = new Dog('Azor');
+azor.bark();
+azor.sleep();
+
+
+
 /*--
 ```js
 function f () { return 1;}
@@ -638,26 +800,7 @@ var y = Object.create(x);
 f.prototype.isPrototypeOf(x),
 x.isPrototypeOf(y)];
 
-/*--
 
-### reading/writing from prototypes
-
-* reading (rValues) use the prototype hierachy
-* writing (lValues) do **NOT** use the prototype hierachy
-
-```js
-function F(){}
-F.prototype.a = 1;
-
-var x = new F();
-var y = x.a;
-x.a = 2;
-[y,x.a,F.prototype.a];
-delete x.a;
-x.a;
-```
-
-*/
 
 function F(){}
 F.prototype.a = 1;

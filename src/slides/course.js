@@ -580,7 +580,7 @@ for (var k = 0; k < 3; k++) {
 ### Types revisited
 
 * `typeof()` --> very course clasification of objects
-* `instanceOf()` --> closer (somewhat) to the idea of type from C# or other statically typed languages
+* `instanceOf` --> closer (somewhat) to the idea of type from C# or other statically typed languages
 
 #### What are types used for in statically typed languages ?
 
@@ -779,19 +779,103 @@ var azor = new Dog('Azor');
 azor.bark();
 azor.sleep();
 
-
-
 /*--
+
+### Constructor property
+
+* When first created a prototype object has a `constructor` property that points back to the function.
+
+```js
+var A = function(){};
+A.prototype.constructor === A; // true
+
+``` 
+*/
+function A(){}
+A.prototype.constructor === A;
+
+/*--+
+
+* The constructor property is not really used for anything (as far as I know)
+* ... but we should try to keep it pointing to the right function anyway
+
+```js
+function Animal( name){
+    this.name = name;
+}
+
+Animal.prototype.sleep = function(){
+    out( "" + this.name + " is sleeping." );
+}
+
+function Dog( name){
+    this.name = name;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+//patch the prototype contsturctor to point back to the Dog function
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function(){
+    out( "" + this.name + " is barking." );
+}
+
+```
+
+*/
+/*--
+
+### `instanceof` operator
+
+
+```js
+function A(){ this.a = 1;}
+function B(){ this.b = 1;}
+A.prototype.fa = function(){ return "fa"};
+B.prototype.fb = function(){ return "fb"};
+var a = new A();
+var b = new B();
+a instanceof A; // true
+b instanceof B; // true
+a instanceof B; // false
+A.prototype = B.prototype;
+a instanceof B; // false
+a instanceof A; // false
+out(a,b);
+```
+
+*/
+function A(){ this.a = 1;}
+function B(){ this.b = 1;}
+A.prototype.fa = function(){ return "fa"};
+B.prototype.fb = function(){ return "fb"};
+var a = new A();
+var b = new B();
+a instanceof A;
+
+/*--+
+*/
+A.prototype = B.prototype;
+out(a,a.fa());
+a instanceof A;
+
+/*--+
+
+### `isPrototypeOf()` function
+
+* checks if an object is in the prototype chain of another object 
+
 ```js
 function f () { return 1;}
 var x = new f();
-undefined
 var y = Object.create(x);
-f.prototype.isPrototypeOf(y); 
-f.prototype.isPrototypeOf(x); 
-x.isPrototypeOf(y); 
+f.prototype.isPrototypeOf(y); // true
+f.prototype.isPrototypeOf(x); // true
+x.isPrototypeOf(y);  // true
 ```
 */
+
+
 function f () { return 1;}
 var x = new f();
 undefined
@@ -800,12 +884,77 @@ var y = Object.create(x);
 f.prototype.isPrototypeOf(x),
 x.isPrototypeOf(y)];
 
+/*--
+## this
 
+* in global context (outside of any function) `this===window`
 
-function F(){}
-F.prototype.a = 1;
+*/
 
-var x = new F();
-var y = x.a;
-x.a = 2;
-[y,x.a,F.prototype.a];
+this === window;
+
+/*--+
+
+* two types of functions
+    * bound functions - functions returned by a call to Function.bind()
+    * unbound functions - all other functions, methods etc
+*/
+
+/*--+
+
+### Bound functions
+
+* have `this` fixed when the function is bound
+* once `this` is bound it cannot be changed
+
+```js
+var x = { val: "this is x"};
+
+function A(){
+    this.member1 = function(){ out("member1",this);}
+    this.member1 = this.member1.bind(x);
+}
+
+A.prototype.member2 = function(){ out("member2",this);}
+A.prototype.member2 = A.prototype.member2.bind(x);
+
+var f = function() { out("f", this);}
+f = f.bind(x);
+
+a = new A();
+a.member1();
+a.member2();
+f();
+
+var y = { val: "this is y"};
+
+f = f.bind(y);
+
+f();
+```
+
+*/
+
+var x = { val: "this is x"};
+
+function A(){
+    this.member1 = function(){ out("member1",this);}
+    this.member1 = this.member1.bind(x);
+}
+
+A.prototype.member2 = function(){ out("member2",this);}
+A.prototype.member2 = A.prototype.member2.bind(x);
+
+var f = function() { out("f", this);}
+f = f.bind(x);
+
+a = new A();
+a.member1();
+a.member2();
+f();
+
+var y = { val: "this is y"};
+
+f = f.bind(y);
+
+f();

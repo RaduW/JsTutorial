@@ -9,7 +9,7 @@ var JsTutorial;
             this.$stateParams = $stateParams;
             var self = this;
             self.sandboxOn = true;
-            self.currentSlide = 0;
+            self.currentSlide = -1;
             self.numSlides = 0;
             hotkeys.add({
                 combo: "ctrl+enter",

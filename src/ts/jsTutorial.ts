@@ -26,7 +26,7 @@ namespace JsTutorial {
             var self = this;
             self.sandboxOn = true;
             
-            self.currentSlide = 0;
+            self.currentSlide = -1;
             self.numSlides = 0;
             
             hotkeys.add({

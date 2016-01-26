@@ -615,7 +615,7 @@ for (var k = 0; k < 3; k++) {
     * Via object
         * `Object.getPrototypeOf(x)` --> the protable standard way in EcmaScript 5
         * `x.__proto__` --> legacy style (pre EcmaScript 5) non stadard but widely supported
-    * via constructor f.prototype
+    * via constructor `f.prototype`
  
 ```js
 function f(){return 1;}
@@ -692,7 +692,7 @@ var b = new A();
 b.f = function() { return this.x - this.y;} 
 b.f(); // -1
 /*--
-### reading/writing from prototypes
+### Reading/Writing from prototypes
 
 * reading (rValues) uses the prototype hierachy
 * writing (lValues) does **NOT** use the prototype hierachy
@@ -709,8 +709,8 @@ x.a = 2;
 delete x.a;
 x.a;
 ```
-
 */
+
 function F(){}
 F.prototype.a = 1;
 

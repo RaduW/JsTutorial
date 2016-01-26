@@ -725,6 +725,83 @@ delete x.a;
 
 out("after deleting x.a we get x.a=" + x.a);
 
+/*--+
+
+### sharing common data
+
+* if writing does **NOT** use the prototype how can we share read/write data ?
+
+*/
+
+/*--+
+#### Method 1 keep data in the constructor object
+
+* this is how `static` is implemented in Typescript
+
+```js
+function F(){
+    this.counter = F.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.counter = 0;
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.counter + " objects"); 
+```
+*/
+function F(){
+    this.counter = F.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.counter = 0;
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.counter + " objects"); 
+
+/*--+
+#### Method 2 keep an object in the prototype and modify its members
+
+* this is the idea used in Angular '**controllerAs**' technique.
+
+```js
+function F(){
+    this.counter = this.viewModel.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.prototype.viewModel = { counter: 0};
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.prototype.viewModel.counter + " objects"); 
+```
+
+*/
+
+function F(){
+    this.counter = this.viewModel.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.prototype.viewModel = { counter: 0};
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.prototype.viewModel.counter + " objects"); 
+
+
 /*--
 ### Prototype Inheritance
 
@@ -927,9 +1004,7 @@ a.member2();
 f();
 
 var y = { val: "this is y"};
-
 f = f.bind(y);
-
 f();
 ```
 
@@ -954,7 +1029,164 @@ a.member2();
 f();
 
 var y = { val: "this is y"};
-
 f = f.bind(y);
+f();
+
+/*--
+
+## this
+
+* two types of functions
+    * bound functions - functions returned by a call to Function.bind()
+    * unbound functions - all other functions, methods etc
+*/
+
+/*--+
+
+### Unbound functions
+
+* all other functions are unbound
+* all unbound functions take their `this` **at call time**.
+* if no `this` is passed at call time then:
+    * in strict mode `this === undefined`
+    * in non strict mode 'this ==== window` 
+
+*/
+
+function f(){
+    this.a = 'a set in f';
+}
 
 f();
+a;
+
+/*--+
+*/
+
+function g(){
+    'use strict';
+    this.a = 'a set in g';
+}
+
+/*--+
+
+#### How is this set
+
+1. when using the `new F();` syntax
+
+a new empty object is created and passed as `this`;
+*/
+
+function F(){
+    'use strict';
+    this.a = 'a set in F';
+}
+
+var x = new F();
+x.a;
+
+/*--+
+
+2. when using the 'member' syntax `x.f()` `this` is the member
+
+*/
+
+function F(){}
+
+F.prototype.member = function(){
+    'use strict';
+    this.a = 'a set in member';
+}
+
+var x = new F();
+x.member();
+x.a;
+
+/*--+
+
+3. this passed explicitly to `call()` or `apply()`
+
+*/
+
+function F(){}
+
+function someFunc(){
+    'use strict';
+    this.a = 'a set in someFunc';
+}
+
+var x = new F();
+var y = new F();
+
+f.apply(x);
+f.call(y);
+
+[x.a, y.a];
+
+/*--+
+
+4. this passed explicitly to library functions or js functions like forEach ( same thing as `call()` or `apply()` )
+
+*/
+
+function F(){
+    this.counter = 0;
+}
+
+function someFunc(val){
+    'use strict';
+    this.counter += val;
+}
+
+var x = new F();
+
+var someArray = [1,2,3];
+someArray.forEach(someFunc,x);
+
+x.counter;
+
+/*--+
+
+5. JS6 (Javascript 2015) using  => functions
+
+* arrow functions close on the `this` at creation time
+--
+
+```js
+function F(){
+    'use strict';
+    this.f = () => { this.a ='set in f()';};
+}
+```
+
+equivalent in JS5 with :
+
+```js
+function F(){
+    'use strict';
+    var closedThis = this;
+    this.f = function(){ closedThis.a ='set in f()';};
+}
+```
+*/
+
+function F(){
+    'use strict';
+    var closedThis = this;
+    this.f = function(){ closedThis.a ='set in f()';};
+}
+
+var x = new F();
+var ff = x.f;
+
+ff();
+
+x.a;
+
+/*--+
+
+* **Important!:** If a function is unbound and it is not called using one of the methods described above it will have a **BAD** `this` 
+  *  `undefined` for strict functions
+  * `window` for non strict functions
+  
+*/

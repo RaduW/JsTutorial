@@ -9,7 +9,7 @@ var JsTutorial;
             this.$stateParams = $stateParams;
             var self = this;
             self.sandboxOn = true;
-            self.currentSlide = 0;
+            self.currentSlide = -1;
             self.numSlides = 0;
             hotkeys.add({
                 combo: "ctrl+enter",
@@ -33,6 +33,12 @@ var JsTutorial;
                 combo: "alt+del",
                 description: "clear javascript panel",
                 callback: function (event, hotkey) { self.onClear(); },
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
+            });
+            hotkeys.add({
+                combo: "shift+alt+del",
+                description: "clear output panel",
+                callback: function (event, hotkey) { self.onClearOutput(); },
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA']
             });
             self.scriptLoader.loadScript('course.js').then(function (response) {
@@ -99,6 +105,11 @@ var JsTutorial;
             var self = this;
             if (self.jsConsolePanel)
                 self.jsConsolePanel.clear();
+        };
+        JsTutorialController.prototype.onClearOutput = function () {
+            var self = this;
+            if (self.outputPanel)
+                self.outputPanel.clear();
         };
         JsTutorialController.prototype.onRun = function () {
             var self = this;

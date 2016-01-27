@@ -225,11 +225,24 @@ var h = function()
 #### free variable
 * A variable used in a function that is neither a function parameter nor a local variable
 #### bound variable
-* either a local variable or a parameter 
+* either a local variable or a parameter
+
+```js
+var a = 1;
+var b = 1;
+function f(a,m){
+    var n = a+b+m;
+    return n;
+}
+```
+ 
 */
 
 /*--
 ## dynamic versus static (lexical) scope
+
+* An example
+* What does `higher(foo)` return ?
 
 ```js
 var x = 10;
@@ -409,6 +422,7 @@ var i4 =m2();
 [i1(),i2(),i3(),i4()];
 ```
 */
+
 var a = 0;
 function outer(){
     var b = 0;
@@ -1045,7 +1059,7 @@ f();
 
 ### Unbound functions
 
-* all other functions are unbound
+* all functions that were not bound by a call to Function.bind() are unbound
 * all unbound functions take their `this` **at call time**.
 * if no `this` is passed at call time then:
     * in strict mode `this === undefined`
@@ -1150,7 +1164,7 @@ x.counter;
 * JS6 (Javascript 2015) using  => functions
 
 * arrow functions close on the `this` at creation time
---
+
 
 ```js
 function F(){
@@ -1187,7 +1201,7 @@ x.a;
 
 ### **NOT** using `this`
 
-* You don't have to use `this` for accessing object members, you can 'cheat` and use a closed copy of `this` 
+* You don't have to use `this` for accessing object members, you can 'cheat' and use a closed copy of `this` 
 
 This is exactly the way the arrow function example above works. 
 

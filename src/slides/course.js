@@ -1070,10 +1070,10 @@ function g(){
 
 /*--+
 
-#### How is this set
+#### How is `this` set
 
-1. when using the `new F();` syntax
-
+* when using the `new F();` syntax
+ 
 a new empty object is created and passed as `this`;
 */
 
@@ -1087,7 +1087,7 @@ x.a;
 
 /*--+
 
-2. when using the 'member' syntax `x.f()` `this` is the member
+* when using the 'member' syntax `x.f()` `this` is the id left of the '.'
 
 */
 
@@ -1104,7 +1104,7 @@ x.a;
 
 /*--+
 
-3. this passed explicitly to `call()` or `apply()`
+* this passed explicitly to `call()` or `apply()`
 
 */
 
@@ -1125,7 +1125,7 @@ f.call(y);
 
 /*--+
 
-4. this passed explicitly to library functions or js functions like forEach ( same thing as `call()` or `apply()` )
+* this passed explicitly to library functions or js functions like forEach ( same thing as `call()` or `apply()` )
 
 */
 
@@ -1147,7 +1147,7 @@ x.counter;
 
 /*--+
 
-5. JS6 (Javascript 2015) using  => functions
+* JS6 (Javascript 2015) using  => functions
 
 * arrow functions close on the `this` at creation time
 --
@@ -1183,9 +1183,61 @@ ff();
 
 x.a;
 
-/*--+
+/*--
 
-* **Important!:** If a function is unbound and it is not called using one of the methods described above it will have a **BAD** `this` 
+### **NOT** using `this`
+
+* You don't have to use `this` for accessing object members, you can 'cheat` and use a closed copy of `this` 
+
+This is exactly the way the arrow function example above works. 
+
+Instead of using `this` close the `this` of an external context and use the closed `this`.
+
+This technique is wildly used by many frameworks and guidelines.
+
+The names used for the closed `this` are typically `vm, that, self, _this` 
+
+```js
+
+var SomeFramework = {
+    registerCallback:  function(callback) { SomeFramework.callback = callback;},
+    doStuff: function() { SomeFramework.callback();}
+}
+
+function F(){
+    'use strict';
+    this.a = "F.a set in constructor"
+    var that = this;
+    this.f = function(){ out(that.a);};
+    SomeFramework.registerCallback(this.f);
+}
+
+var x = new F();
+SomeFramework.doStuff();
+```
+*/
+
+var SomeFramework = {
+    registerCallback:  function(callback) { SomeFramework.callback = callback;},
+    doStuff: function() { SomeFramework.callback();}
+}
+
+function F(){
+    'use strict';
+    this.a = "F.a set in constructor"
+    var that = this;
+    this.f = function(){ out(that.a);};
+    SomeFramework.registerCallback(this.f);
+}
+
+var x = new F();
+SomeFramework.doStuff();
+
+/*--
+
+### Conclusion
+
+* If a function is unbound and it is not called using one of the methods described above it will have a **BAD** `this` 
   *  `undefined` for strict functions
   * `window` for non strict functions
   

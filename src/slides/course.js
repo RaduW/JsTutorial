@@ -580,7 +580,7 @@ for (var k = 0; k < 3; k++) {
 ### Types revisited
 
 * `typeof()` --> very course clasification of objects
-* `instanceOf()` --> closer (somewhat) to the idea of type from C# or other statically typed languages
+* `instanceOf` --> closer (somewhat) to the idea of type from C# or other statically typed languages
 
 #### What are types used for in statically typed languages ?
 
@@ -615,7 +615,7 @@ for (var k = 0; k < 3; k++) {
     * Via object
         * `Object.getPrototypeOf(x)` --> the protable standard way in EcmaScript 5
         * `x.__proto__` --> legacy style (pre EcmaScript 5) non stadard but widely supported
-    * via constructor f.prototype
+    * via constructor `f.prototype`
  
 ```js
 function f(){return 1;}
@@ -692,7 +692,7 @@ var b = new A();
 b.f = function() { return this.x - this.y;} 
 b.f(); // -1
 /*--
-### reading/writing from prototypes
+### Reading/Writing from prototypes
 
 * reading (rValues) uses the prototype hierachy
 * writing (lValues) does **NOT** use the prototype hierachy
@@ -709,8 +709,8 @@ x.a = 2;
 delete x.a;
 x.a;
 ```
-
 */
+
 function F(){}
 F.prototype.a = 1;
 
@@ -724,6 +724,83 @@ out("old=" + old +" x.a=" + x.a + " F.prototype.a=" + F.prototype.a);
 delete x.a;
 
 out("after deleting x.a we get x.a=" + x.a);
+
+/*--+
+
+### sharing common data
+
+* if writing does **NOT** use the prototype how can we share read/write data ?
+
+*/
+
+/*--+
+#### Method 1 keep data in the constructor object
+
+* this is how `static` is implemented in Typescript
+
+```js
+function F(){
+    this.counter = F.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.counter = 0;
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.counter + " objects"); 
+```
+*/
+function F(){
+    this.counter = F.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.counter = 0;
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.counter + " objects"); 
+
+/*--+
+#### Method 2 keep an object in the prototype and modify its members
+
+* this is the idea used in Angular '**controllerAs**' technique.
+
+```js
+function F(){
+    this.counter = this.viewModel.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.prototype.viewModel = { counter: 0};
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.prototype.viewModel.counter + " objects"); 
+```
+
+*/
+
+function F(){
+    this.counter = this.viewModel.counter++;
+}
+
+F.prototype.print = function() { out("I am object number:" + this.counter);}
+F.prototype.viewModel = { counter: 0};
+
+var a1 = new F(), a2 = new F(), a3 = new F();
+a1.print();
+a2.print();
+a3.print();
+out ( "We have constructed " + F.prototype.viewModel.counter + " objects"); 
+
 
 /*--
 ### Prototype Inheritance
@@ -779,19 +856,103 @@ var azor = new Dog('Azor');
 azor.bark();
 azor.sleep();
 
-
-
 /*--
+
+### Constructor property
+
+* When first created a prototype object has a `constructor` property that points back to the function.
+
+```js
+var A = function(){};
+A.prototype.constructor === A; // true
+
+``` 
+*/
+function A(){}
+A.prototype.constructor === A;
+
+/*--+
+
+* The constructor property is not really used for anything (as far as I know)
+* ... but we should try to keep it pointing to the right function anyway
+
+```js
+function Animal( name){
+    this.name = name;
+}
+
+Animal.prototype.sleep = function(){
+    out( "" + this.name + " is sleeping." );
+}
+
+function Dog( name){
+    this.name = name;
+}
+
+Dog.prototype = Object.create(Animal.prototype);
+//patch the prototype contsturctor to point back to the Dog function
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function(){
+    out( "" + this.name + " is barking." );
+}
+
+```
+
+*/
+/*--
+
+### `instanceof` operator
+
+
+```js
+function A(){ this.a = 1;}
+function B(){ this.b = 1;}
+A.prototype.fa = function(){ return "fa"};
+B.prototype.fb = function(){ return "fb"};
+var a = new A();
+var b = new B();
+a instanceof A; // true
+b instanceof B; // true
+a instanceof B; // false
+A.prototype = B.prototype;
+a instanceof B; // false
+a instanceof A; // false
+out(a,b);
+```
+
+*/
+function A(){ this.a = 1;}
+function B(){ this.b = 1;}
+A.prototype.fa = function(){ return "fa"};
+B.prototype.fb = function(){ return "fb"};
+var a = new A();
+var b = new B();
+a instanceof A;
+
+/*--+
+*/
+A.prototype = B.prototype;
+out(a,a.fa());
+a instanceof A;
+
+/*--+
+
+### `isPrototypeOf()` function
+
+* checks if an object is in the prototype chain of another object 
+
 ```js
 function f () { return 1;}
 var x = new f();
-undefined
 var y = Object.create(x);
-f.prototype.isPrototypeOf(y); 
-f.prototype.isPrototypeOf(x); 
-x.isPrototypeOf(y); 
+f.prototype.isPrototypeOf(y); // true
+f.prototype.isPrototypeOf(x); // true
+x.isPrototypeOf(y);  // true
 ```
 */
+
+
 function f () { return 1;}
 var x = new f();
 undefined
@@ -800,12 +961,284 @@ var y = Object.create(x);
 f.prototype.isPrototypeOf(x),
 x.isPrototypeOf(y)];
 
+/*--
+## this
 
+* in global context (outside of any function) `this===window`
 
-function F(){}
-F.prototype.a = 1;
+*/
+
+this === window;
+
+/*--+
+
+* two types of functions
+    * bound functions - functions returned by a call to Function.bind()
+    * unbound functions - all other functions, methods etc
+*/
+
+/*--+
+
+### Bound functions
+
+* have `this` fixed when the function is bound
+* once `this` is bound it cannot be changed
+
+```js
+var x = { val: "this is x"};
+
+function A(){
+    this.member1 = function(){ out("member1",this);}
+    this.member1 = this.member1.bind(x);
+}
+
+A.prototype.member2 = function(){ out("member2",this);}
+A.prototype.member2 = A.prototype.member2.bind(x);
+
+var f = function() { out("f", this);}
+f = f.bind(x);
+
+a = new A();
+a.member1();
+a.member2();
+f();
+
+var y = { val: "this is y"};
+f = f.bind(y);
+f();
+```
+
+*/
+
+var x = { val: "this is x"};
+
+function A(){
+    this.member1 = function(){ out("member1",this);}
+    this.member1 = this.member1.bind(x);
+}
+
+A.prototype.member2 = function(){ out("member2",this);}
+A.prototype.member2 = A.prototype.member2.bind(x);
+
+var f = function() { out("f", this);}
+f = f.bind(x);
+
+a = new A();
+a.member1();
+a.member2();
+f();
+
+var y = { val: "this is y"};
+f = f.bind(y);
+f();
+
+/*--
+
+## this
+
+* two types of functions
+    * bound functions - functions returned by a call to Function.bind()
+    * unbound functions - all other functions, methods etc
+*/
+
+/*--+
+
+### Unbound functions
+
+* all other functions are unbound
+* all unbound functions take their `this` **at call time**.
+* if no `this` is passed at call time then:
+    * in strict mode `this === undefined`
+    * in non strict mode 'this ==== window` 
+
+*/
+
+function f(){
+    this.a = 'a set in f';
+}
+
+f();
+a;
+
+/*--+
+*/
+
+function g(){
+    'use strict';
+    this.a = 'a set in g';
+}
+
+/*--+
+
+#### How is `this` set
+
+* when using the `new F();` syntax
+ 
+a new empty object is created and passed as `this`;
+*/
+
+function F(){
+    'use strict';
+    this.a = 'a set in F';
+}
 
 var x = new F();
-var y = x.a;
-x.a = 2;
-[y,x.a,F.prototype.a];
+x.a;
+
+/*--+
+
+* when using the 'member' syntax `x.f()` `this` is the id left of the '.'
+
+*/
+
+function F(){}
+
+F.prototype.member = function(){
+    'use strict';
+    this.a = 'a set in member';
+}
+
+var x = new F();
+x.member();
+x.a;
+
+/*--+
+
+* this passed explicitly to `call()` or `apply()`
+
+*/
+
+function F(){}
+
+function someFunc(){
+    'use strict';
+    this.a = 'a set in someFunc';
+}
+
+var x = new F();
+var y = new F();
+
+f.apply(x);
+f.call(y);
+
+[x.a, y.a];
+
+/*--+
+
+* this passed explicitly to library functions or js functions like forEach ( same thing as `call()` or `apply()` )
+
+*/
+
+function F(){
+    this.counter = 0;
+}
+
+function someFunc(val){
+    'use strict';
+    this.counter += val;
+}
+
+var x = new F();
+
+var someArray = [1,2,3];
+someArray.forEach(someFunc,x);
+
+x.counter;
+
+/*--+
+
+* JS6 (Javascript 2015) using  => functions
+
+* arrow functions close on the `this` at creation time
+--
+
+```js
+function F(){
+    'use strict';
+    this.f = () => { this.a ='set in f()';};
+}
+```
+
+equivalent in JS5 with :
+
+```js
+function F(){
+    'use strict';
+    var closedThis = this;
+    this.f = function(){ closedThis.a ='set in f()';};
+}
+```
+*/
+
+function F(){
+    'use strict';
+    var closedThis = this;
+    this.f = function(){ closedThis.a ='set in f()';};
+}
+
+var x = new F();
+var ff = x.f;
+
+ff();
+
+x.a;
+
+/*--
+
+### **NOT** using `this`
+
+* You don't have to use `this` for accessing object members, you can 'cheat` and use a closed copy of `this` 
+
+This is exactly the way the arrow function example above works. 
+
+Instead of using `this` close the `this` of an external context and use the closed `this`.
+
+This technique is wildly used by many frameworks and guidelines.
+
+The names used for the closed `this` are typically `vm, that, self, _this` 
+
+```js
+
+var SomeFramework = {
+    registerCallback:  function(callback) { SomeFramework.callback = callback;},
+    doStuff: function() { SomeFramework.callback();}
+}
+
+function F(){
+    'use strict';
+    this.a = "F.a set in constructor"
+    var that = this;
+    this.f = function(){ out(that.a);};
+    SomeFramework.registerCallback(this.f);
+}
+
+var x = new F();
+SomeFramework.doStuff();
+```
+*/
+
+var SomeFramework = {
+    registerCallback:  function(callback) { SomeFramework.callback = callback;},
+    doStuff: function() { SomeFramework.callback();}
+}
+
+function F(){
+    'use strict';
+    this.a = "F.a set in constructor"
+    var that = this;
+    this.f = function(){ out(that.a);};
+    SomeFramework.registerCallback(this.f);
+}
+
+var x = new F();
+SomeFramework.doStuff();
+
+/*--
+
+### Conclusion
+
+* If a function is unbound and it is not called using one of the methods described above it will have a **BAD** `this` 
+  *  `undefined` for strict functions
+  * `window` for non strict functions
+  
+*/

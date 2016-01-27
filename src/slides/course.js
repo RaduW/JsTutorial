@@ -562,9 +562,9 @@ for (var k = 0; k < 3; k++) {
 // or shorter...
 
 for (var k = 0; k < 3; k++) {
-    (function(k){
-        data[k] = function () {
-            return k;
+    (function(x){
+        data[x] = function () {
+            return x;
         }
     })(k);
 } 

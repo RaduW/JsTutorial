@@ -37,8 +37,17 @@ x.c = function(){ return 22;}
 
 /*--+
 
-### indexes can be anything (including other objects)
-When non string indexes are used only the [] notation can be used
+### ~~indexes can be anything (including other objects)~~
+~~When non string indexes are used only the [] notation can be used~~
+
+**When using objects as indexes they will be converted to strings and the resulting string
+will become the index !!!**
+
+**This is problematic DON'T do it.** 
+  
+In ECMAScript 2015 (JS6) there is the object Map that can be used with any type of index.
+
+*** Wrong Example Below !!!! ***
 ```js
 var x = {};
 var y = {};
@@ -58,7 +67,10 @@ x[f] = 111;
 x[y]()+x[1]()+x[f];
 
 /*--+
-and also symbols
+Symbols
+
+Symbol work as indexes, they are **NOT** converted to strings
+
 ```js
 var x = {};
 var y = Symbol('something');
